@@ -128,14 +128,14 @@ export default function NotificationDropdown() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50" dir="rtl" style={{ top: '100%' }}>
-          <div className="p-4 border-b border-gray-200">
+        <div className="absolute right-0 mt-2 w-[90vw] sm:w-80 max-w-sm bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50" dir="rtl" style={{ top: '100%' }}>
+          <div className="p-3 sm:p-4 border-b border-gray-200">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">الإشعارات</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900">الإشعارات</h3>
               {unreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}
-                  className="text-xs text-blue-600 hover:text-blue-700"
+                  className="text-xs sm:text-sm text-blue-600 hover:text-blue-700 whitespace-nowrap"
                 >
                   تحديد الكل كمقروء
                 </button>
@@ -143,7 +143,7 @@ export default function NotificationDropdown() {
             </div>
           </div>
 
-          <div className="max-h-96 overflow-y-auto">
+          <div className="max-h-[60vh] sm:max-h-96 overflow-y-auto">
             {loading ? (
               <div className="p-4 text-center text-gray-500 text-sm">
                 جاري التحميل...
@@ -156,7 +156,7 @@ export default function NotificationDropdown() {
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors ${
+                  className={`p-3 sm:p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors ${
                     !notification.read ? 'bg-blue-50' : ''
                   }`}
                 >
@@ -171,11 +171,11 @@ export default function NotificationDropdown() {
                           }}
                           className="block"
                         >
-                          <h4 className="text-sm font-semibold text-gray-900 mb-1">
+                          <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-1">
                             {notification.title}
                           </h4>
                           {notification.content && (
-                            <p className="text-xs text-gray-600 mb-2">
+                            <p className="text-xs sm:text-sm text-gray-600 mb-2 line-clamp-2">
                               {notification.content}
                             </p>
                           )}
@@ -185,11 +185,11 @@ export default function NotificationDropdown() {
                         </Link>
                       ) : (
                         <>
-                          <h4 className="text-sm font-semibold text-gray-900 mb-1">
+                          <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-1">
                             {notification.title}
                           </h4>
                           {notification.content && (
-                            <p className="text-xs text-gray-600 mb-2">
+                            <p className="text-xs sm:text-sm text-gray-600 mb-2 line-clamp-2">
                               {notification.content}
                             </p>
                           )}
@@ -200,11 +200,11 @@ export default function NotificationDropdown() {
                       )}
                     </div>
                     
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 flex-shrink-0">
                       {!notification.read && (
                         <button
                           onClick={() => markAsRead(notification.id)}
-                          className="p-1 rounded hover:bg-gray-200 text-blue-600"
+                          className="p-1.5 rounded hover:bg-gray-200 text-blue-600"
                           title="تحديد كمقروء"
                         >
                           <Check className="h-4 w-4" />
@@ -212,7 +212,7 @@ export default function NotificationDropdown() {
                       )}
                       <button
                         onClick={() => deleteNotification(notification.id)}
-                        className="p-1 rounded hover:bg-gray-200 text-gray-600 hover:text-red-600"
+                        className="p-1.5 rounded hover:bg-gray-200 text-gray-600 hover:text-red-600"
                         title="حذف"
                       >
                         <X className="h-4 w-4" />

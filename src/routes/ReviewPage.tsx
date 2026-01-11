@@ -156,61 +156,61 @@ export default function ReviewPage() {
   return (
     <div className="space-y-6" dir="rtl">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">لوحة المراجعة</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">لوحة المراجعة</h1>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="card p-4 text-center">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
+        <div className="card p-3 sm:p-4 text-center">
           <div className="flex items-center justify-center mb-2">
-            <div className="p-2 rounded-lg bg-purple-50">
-              <Eye className="h-5 w-5 text-purple-600" />
+            <div className="p-1.5 sm:p-2 rounded-lg bg-purple-50">
+              <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-gray-900">{pendingTasks.length}</div>
-          <div className="text-sm text-gray-600">جاري المراجعة</div>
+          <div className="text-xl sm:text-2xl font-bold text-gray-900">{pendingTasks.length}</div>
+          <div className="text-xs sm:text-sm text-gray-600">جاري المراجعة</div>
         </div>
-        <div className="card p-4 text-center">
+        <div className="card p-3 sm:p-4 text-center">
           <div className="flex items-center justify-center mb-2">
-            <div className="p-2 rounded-lg bg-blue-50">
-              <Calendar className="h-5 w-5 text-blue-600" />
+            <div className="p-1.5 sm:p-2 rounded-lg bg-blue-50">
+              <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-gray-900">{otherTasks.length}</div>
-          <div className="text-sm text-gray-600">قيد التنفيذ</div>
+          <div className="text-xl sm:text-2xl font-bold text-gray-900">{otherTasks.length}</div>
+          <div className="text-xs sm:text-sm text-gray-600">قيد التنفيذ</div>
         </div>
-        <div className="card p-4 text-center">
+        <div className="card p-3 sm:p-4 text-center">
           <div className="flex items-center justify-center mb-2">
-            <div className="p-2 rounded-lg bg-green-50">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
+            <div className="p-1.5 sm:p-2 rounded-lg bg-green-50">
+              <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-gray-900">{approvedTasks.length}</div>
-          <div className="text-sm text-gray-600">معتمدة</div>
+          <div className="text-xl sm:text-2xl font-bold text-gray-900">{approvedTasks.length}</div>
+          <div className="text-xs sm:text-sm text-gray-600">معتمدة</div>
         </div>
       </div>
 
       {/* Pending Review Tasks */}
       {pendingTasks.length > 0 && (
         <div className="card">
-          <div className="px-6 py-3 border-b border-gray-200 bg-purple-50">
-            <h2 className="text-lg font-semibold text-gray-900">مهام تحتاج للمراجعة</h2>
+          <div className="px-3 sm:px-6 py-2 sm:py-3 border-b border-gray-200 bg-purple-50">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900">مهام تحتاج للمراجعة</h2>
           </div>
           <div className="divide-y divide-gray-200">
             {pendingTasks.map(task => (
-              <div key={task.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
-                <div className="flex items-center justify-between gap-4">
+              <div key={task.id} className="px-3 sm:px-6 py-3 sm:py-4 hover:bg-gray-50 transition-colors">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <Link to={`/tasks/${task.id}`} className="text-base font-semibold text-gray-900 hover:text-blue-700 block truncate">
+                    <Link to={`/tasks/${task.id}`} className="text-sm sm:text-base font-semibold text-gray-900 hover:text-blue-700 block">
                       {task.title}
                     </Link>
                     {task.description && (
-                      <p className="mt-1 text-sm text-gray-600 line-clamp-1">
+                      <p className="mt-1 text-xs sm:text-sm text-gray-600 line-clamp-2 sm:line-clamp-1">
                         {task.description}
                       </p>
                     )}
-                    <div className="mt-2 flex items-center gap-3">
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
                       <StatusBadge status={task.status} />
                       <PriorityBadge priority={task.priority} />
                       {task.assignee && (
@@ -225,19 +225,19 @@ export default function ReviewPage() {
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 justify-end sm:justify-start">
                     <button
                       onClick={() => handleApprove(task.id)}
-                      className="rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-green-500 flex items-center gap-1"
+                      className="rounded-md bg-green-600 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold text-white hover:bg-green-500 flex items-center gap-1 whitespace-nowrap"
                     >
-                      <CheckCircle2 className="h-4 w-4" />
+                      <CheckCircle2 className="h-3 w-3 sm:h-4 sm:w-4" />
                       اعتماد
                     </button>
                     <button
                       onClick={() => handleReturn(task.id)}
-                      className="rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-red-500 flex items-center gap-1"
+                      className="rounded-md bg-red-600 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold text-white hover:bg-red-500 flex items-center gap-1 whitespace-nowrap"
                     >
-                      <XCircle className="h-4 w-4" />
+                      <XCircle className="h-3 w-3 sm:h-4 sm:w-4" />
                       رد
                     </button>
                   </div>
@@ -251,18 +251,18 @@ export default function ReviewPage() {
       {/* Approved Tasks */}
       {approvedTasks.length > 0 && (
         <div className="card">
-          <div className="px-6 py-3 border-b border-gray-200 bg-green-50">
-            <h2 className="text-lg font-semibold text-gray-900">المهام المعتمدة</h2>
+          <div className="px-3 sm:px-6 py-2 sm:py-3 border-b border-gray-200 bg-green-50">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900">المهام المعتمدة</h2>
           </div>
           <div className="divide-y divide-gray-200">
             {approvedTasks.map(task => (
-              <div key={task.id} className="px-6 py-4 hover:bg-gray-50 transition-colors opacity-70">
-                <div className="flex items-center justify-between gap-4">
+              <div key={task.id} className="px-3 sm:px-6 py-3 sm:py-4 hover:bg-gray-50 transition-colors opacity-70">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <Link to={`/tasks/${task.id}`} className="text-base font-semibold text-gray-900 hover:text-blue-700 block truncate">
+                    <Link to={`/tasks/${task.id}`} className="text-sm sm:text-base font-semibold text-gray-900 hover:text-blue-700 block">
                       {task.title}
                     </Link>
-                    <div className="mt-2 flex items-center gap-3">
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
                       <StatusBadge status={task.status} />
                       <PriorityBadge priority={task.priority} />
                       {task.assignee && (
@@ -287,23 +287,23 @@ export default function ReviewPage() {
       {/* Other Tasks (In Progress) */}
       {otherTasks.length > 0 && (
         <div className="card">
-          <div className="px-6 py-3 border-b border-gray-200 bg-blue-50">
-            <h2 className="text-lg font-semibold text-gray-900">مهام قيد التنفيذ (لم تُرسل للمراجعة بعد)</h2>
+          <div className="px-3 sm:px-6 py-2 sm:py-3 border-b border-gray-200 bg-blue-50">
+            <h2 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900">مهام قيد التنفيذ (لم تُرسل للمراجعة بعد)</h2>
           </div>
           <div className="divide-y divide-gray-200">
             {otherTasks.map(task => (
-              <div key={task.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
-                <div className="flex items-center justify-between gap-4">
+              <div key={task.id} className="px-3 sm:px-6 py-3 sm:py-4 hover:bg-gray-50 transition-colors">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <Link to={`/tasks/${task.id}`} className="text-base font-semibold text-gray-900 hover:text-blue-700 block truncate">
+                    <Link to={`/tasks/${task.id}`} className="text-sm sm:text-base font-semibold text-gray-900 hover:text-blue-700 block">
                       {task.title}
                     </Link>
                     {task.description && (
-                      <p className="mt-1 text-sm text-gray-600 line-clamp-1">
+                      <p className="mt-1 text-xs sm:text-sm text-gray-600 line-clamp-2 sm:line-clamp-1">
                         {task.description}
                       </p>
                     )}
-                    <div className="mt-2 flex items-center gap-3">
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
                       <StatusBadge status={task.status} />
                       <PriorityBadge priority={task.priority} />
                       {task.assignee && (
