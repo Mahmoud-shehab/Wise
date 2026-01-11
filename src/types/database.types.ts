@@ -765,6 +765,40 @@ export interface Database {
           }
         ]
       }
+      task_reviewers: {
+        Row: {
+          id: string
+          task_id: string
+          reviewer_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          task_id: string
+          reviewer_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          task_id?: string
+          reviewer_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_reviewers_task_id_fkey"
+            columns: ["task_id"]
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_reviewers_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never

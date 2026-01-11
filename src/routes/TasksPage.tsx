@@ -4,31 +4,25 @@ import { TaskCard } from '../features/tasks/TaskCard';
 import { useAuth } from '../features/auth/AuthContext';
 import { CheckCircle2, Clock, PlayCircle, Calendar } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
-import { Database } from '@/types/database.types';
 
 export default function TasksPage() {
   const { tasks, loading, updateTaskStatus, assignTask } = useTasks();
   const { profile, user } = useAuth();
   const [filter, setFilter] = useState('all');
   const isManager = profile?.role === 'manager';
-  type Profile = Database['public']['Tables']['profiles']['Row'];
-  const [employees, setEmployees] = useState<Profile[]>([]);
 
   useEffect(() => {
     const fetchEmployees = async () => {
       if (!isManager) return;
       if (!isSupabaseConfigured) {
-        setEmployees([]);
         return;
       }
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('profiles')
         .select('id, full_name, role, created_at')
         .order('full_name', { ascending: true });
       if (error) {
         console.error('Error fetching employees:', error);
-      } else {
-        setEmployees(data || []);
       }
     };
     fetchEmployees();

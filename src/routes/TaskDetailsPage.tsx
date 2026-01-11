@@ -109,14 +109,14 @@ export default function TaskDetailsPage() {
     // التحقق من الصلاحيات لحالة "جاري المراجعة"
     if (newStatus === 'pending_review') {
       const isManager = profile?.role === 'manager';
-      const isReviewer = user?.id === task.reviewer_id;
+      const isReviewer = user?.id === reviewerId;
       
       if (!isManager && !isReviewer) {
         alert('فقط المدير أو المراجع المحدد يمكنه تغيير الحالة إلى "جاري المراجعة"');
         return;
       }
       
-      if (!task.reviewer_id) {
+      if (!reviewerId) {
         alert('يجب تعيين مراجع للمهمة أولاً');
         return;
       }
@@ -275,7 +275,7 @@ export default function TaskDetailsPage() {
                 <option value="assigned">مستلمة</option>
                 <option value="in_progress">جاري العمل</option>
                 {/* فقط المراجع أو المدير يمكنهم تغيير الحالة إلى جاري المراجعة */}
-                {(profile?.role === 'manager' || user?.id === task.reviewer_id) && (
+                {(profile?.role === 'manager' || user?.id === reviewerId) && (
                   <option value="pending_review">جاري المراجعة</option>
                 )}
                 <option value="done">مكتملة</option>
