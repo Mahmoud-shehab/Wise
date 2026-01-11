@@ -47,16 +47,11 @@ export default function ReviewPage() {
   const fetchReviewTasks = async () => {
     if (!user) return;
     
-    console.log('🔍 Fetching review tasks for user:', user.id);
-    
     // جلب المهام من جدول task_reviewers
     const { data: reviewerData, error: reviewerError } = await supabase
       .from('task_reviewers')
       .select('task_id')
       .eq('reviewer_id', user.id);
-
-    console.log('📋 Reviewer data:', reviewerData);
-    console.log('❌ Reviewer error:', reviewerError);
 
     if (reviewerError) {
       console.error('Error fetching reviewer data:', reviewerError);
@@ -65,16 +60,12 @@ export default function ReviewPage() {
     }
 
     if (!reviewerData || reviewerData.length === 0) {
-      console.log('⚠️ No tasks assigned to this reviewer');
       setTasks([]);
       setLoading(false);
       return;
     }
 
     const taskIds = reviewerData.map(r => r.task_id);
-    console.log('📝 Task IDs:', taskIds);
-    console.log('📝 Task IDs length:', taskIds.length);
-    console.log('📝 First task ID:', taskIds[0]);
 
     // جلب تفاصيل المهام
     const { data, error } = await supabase
@@ -86,10 +77,6 @@ export default function ReviewPage() {
       .in('id', taskIds)
       .order('updated_at', { ascending: false });
 
-    console.log('📊 Review tasks data:', data);
-    console.log('❌ Review tasks error:', error);
-    console.log('📊 Tasks count:', data?.length || 0);
-
     if (error) {
       console.error('Error fetching review tasks:', error);
     } else {
@@ -99,9 +86,7 @@ export default function ReviewPage() {
   };
 
   const handleApprove = async (taskId: string) => {
-    console.log('🟢 Approving task:', taskId);
-    
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('tasks')
       .update({ 
         status: 'done',
@@ -110,9 +95,6 @@ export default function ReviewPage() {
       })
       .eq('id', taskId)
       .select();
-
-    console.log('✅ Approve result:', data);
-    console.log('❌ Approve error:', error);
 
     if (error) {
       console.error('Error approving task:', error);
@@ -124,9 +106,7 @@ export default function ReviewPage() {
   };
 
   const handleReturn = async (taskId: string) => {
-    console.log('🔴 Returning task:', taskId);
-    
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('tasks')
       .update({ 
         status: 'in_progress',
@@ -134,9 +114,6 @@ export default function ReviewPage() {
       })
       .eq('id', taskId)
       .select();
-
-    console.log('✅ Return result:', data);
-    console.log('❌ Return error:', error);
 
     if (error) {
       console.error('Error returning task:', error);
