@@ -83,11 +83,16 @@ export default function Layout() {
         mobileMenuOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"
       )}>
         <div className="flex h-20 shrink-0 items-center px-6 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-white/10 text-white flex items-center justify-center shadow-md">
-              <span className="text-lg font-bold">W</span>
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-white/10 text-white flex items-center justify-center shadow-md">
+                <span className="text-lg font-bold">W</span>
+              </div>
+              <span className="font-bold text-lg">Wise Tasks</span>
             </div>
-            <span className="font-bold text-lg">Wise Tasks</span>
+            <div className="hidden lg:block">
+              <NotificationDropdown />
+            </div>
           </div>
         </div>
         <div className="flex flex-1 flex-col overflow-y-auto px-6 pb-4">
