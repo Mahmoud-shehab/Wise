@@ -68,11 +68,11 @@ export default function Layout() {
     <div className="min-h-screen bg-gray-100 flex" dir="rtl">
       {/* Mobile menu button */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between bg-white/90 backdrop-blur-sm p-3 border-b border-gray-200 shadow-sm">
-        <NotificationDropdown />
-        <span className="font-bold text-lg text-[#114fd1]">Wise Tasks</span>
         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-md hover:bg-gray-100">
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
+        <span className="font-bold text-lg text-[#114fd1]">Wise Tasks</span>
+        <NotificationDropdown />
       </div>
 
       {/* Sidebar */}

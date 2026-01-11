@@ -128,7 +128,7 @@ export default function NotificationDropdown() {
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 lg:right-0 mt-2 w-[90vw] sm:w-80 max-w-sm bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50" dir="rtl" style={{ top: '100%' }}>
+        <div className="absolute right-0 mt-2 w-[90vw] sm:w-80 max-w-sm bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50" dir="rtl" style={{ top: '100%' }}>
           <div className="p-3 sm:p-4 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <h3 className="text-base sm:text-lg font-semibold text-gray-900">الإشعارات</h3>
