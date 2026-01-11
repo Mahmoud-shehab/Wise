@@ -21,7 +21,7 @@ import MessagesPage from '@/routes/MessagesPage';
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/Wise/">
         <Routes>
           <Route path="/login" element={<Login />} />
           
