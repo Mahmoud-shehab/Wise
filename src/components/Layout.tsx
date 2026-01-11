@@ -67,13 +67,13 @@ export default function Layout() {
   return (
     <div className="min-h-screen bg-gray-100 flex" dir="rtl">
       {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between bg-white/70 backdrop-blur p-4 border-b border-gray-200">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between bg-white/90 backdrop-blur-sm p-3 border-b border-gray-200 shadow-sm">
         <div className="flex items-center gap-2">
           <NotificationDropdown />
-          <span className="font-bold text-xl text-[#114fd1]">Wise Tasks</span>
+          <span className="font-bold text-lg text-[#114fd1]">Wise Tasks</span>
         </div>
         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-md hover:bg-gray-100">
-          {mobileMenuOpen ? <X /> : <Menu />}
+          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
@@ -143,8 +143,8 @@ export default function Layout() {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 min-h-screen lg:pt-0 pt-20">
-        <main className="h-full p-4 sm:p-6 lg:p-8">
+      <div className="flex-1 min-h-screen lg:pt-0 pt-16">
+        <main className="h-full p-3 sm:p-4 md:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto h-full">
             <Outlet />
           </div>

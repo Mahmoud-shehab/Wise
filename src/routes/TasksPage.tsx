@@ -64,32 +64,32 @@ export default function TasksPage() {
   return (
     <div className="space-y-6" dir="rtl">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">مهامي</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">مهامي</h1>
       </div>
 
       {/* Filters */}
-      <div className="card p-4">
-        <div className="flex items-center gap-3 mb-4">
+      <div className="card p-3 sm:p-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
           <span className="text-sm font-semibold text-gray-700">الحالة:</span>
-          <div className="flex gap-2 overflow-x-auto">
+          <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0">
             {isManager && (
               <>
                 <button
                   onClick={() => setFilter('all')}
-                  className={`chip ${filter === 'all' ? 'chip-active' : ''}`}
+                  className={`chip whitespace-nowrap ${filter === 'all' ? 'chip-active' : ''}`}
                 >
                   جميع المهام
                 </button>
                 <button
                   onClick={() => setFilter('my_tasks')}
-                  className={`chip ${filter === 'my_tasks' ? 'chip-active' : ''}`}
+                  className={`chip whitespace-nowrap ${filter === 'my_tasks' ? 'chip-active' : ''}`}
                 >
                   مهامي
                 </button>
                 <button
                   onClick={() => setFilter('unassigned')}
-                  className={`chip ${filter === 'unassigned' ? 'chip-active' : ''}`}
+                  className={`chip whitespace-nowrap ${filter === 'unassigned' ? 'chip-active' : ''}`}
                 >
                   غير مسندة
                 </button>
@@ -101,42 +101,42 @@ export default function TasksPage() {
 
       {/* Stats Cards - Manager Only */}
       {isManager && (
-        <div className="grid grid-cols-4 gap-4">
-          <div className="card p-4 text-center">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="card p-3 sm:p-4 text-center">
             <div className="flex items-center justify-center mb-2">
               <div className="p-2 rounded-lg bg-yellow-50">
-                <Clock className="h-5 w-5 text-yellow-600" />
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600" />
               </div>
             </div>
-            <div className="text-2xl font-bold text-gray-900">{stats.assigned}</div>
-            <div className="text-sm text-gray-600">مستلمة</div>
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.assigned}</div>
+            <div className="text-xs sm:text-sm text-gray-600">مستلمة</div>
           </div>
-          <div className="card p-4 text-center">
+          <div className="card p-3 sm:p-4 text-center">
             <div className="flex items-center justify-center mb-2">
               <div className="p-2 rounded-lg bg-purple-50">
-                <PlayCircle className="h-5 w-5 text-purple-600" />
+                <PlayCircle className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
               </div>
             </div>
-            <div className="text-2xl font-bold text-gray-900">{stats.in_progress}</div>
-            <div className="text-sm text-gray-600">جاري العمل</div>
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.in_progress}</div>
+            <div className="text-xs sm:text-sm text-gray-600">جاري العمل</div>
           </div>
-          <div className="card p-4 text-center">
+          <div className="card p-3 sm:p-4 text-center">
             <div className="flex items-center justify-center mb-2">
               <div className="p-2 rounded-lg bg-blue-50">
-                <Calendar className="h-5 w-5 text-blue-600" />
+                <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
               </div>
             </div>
-            <div className="text-2xl font-bold text-gray-900">{stats.pending_review}</div>
-            <div className="text-sm text-gray-600">جاري المراجعة</div>
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.pending_review}</div>
+            <div className="text-xs sm:text-sm text-gray-600">جاري المراجعة</div>
           </div>
-          <div className="card p-4 text-center">
+          <div className="card p-3 sm:p-4 text-center">
             <div className="flex items-center justify-center mb-2">
               <div className="p-2 rounded-lg bg-green-50">
-                <CheckCircle2 className="h-5 w-5 text-green-600" />
+                <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
               </div>
             </div>
-            <div className="text-2xl font-bold text-gray-900">{stats.done}</div>
-            <div className="text-sm text-gray-600">مكتملة</div>
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.done}</div>
+            <div className="text-xs sm:text-sm text-gray-600">مكتملة</div>
           </div>
         </div>
       )}

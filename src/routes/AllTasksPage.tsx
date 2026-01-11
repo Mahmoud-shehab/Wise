@@ -139,12 +139,12 @@ export default function AllTasksPage() {
   return (
     <div className="space-y-6" dir="rtl">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">إدارة المهام</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">إدارة المهام</h1>
         {isManager && (
           <button
             onClick={() => setIsCreating(true)}
-            className="flex items-center gap-2 btn-primary"
+            className="flex items-center justify-center gap-2 btn-primary text-sm sm:text-base"
           >
             <Plus className="h-4 w-4" /> إضافة مهمة جديدة
           </button>
@@ -153,9 +153,9 @@ export default function AllTasksPage() {
 
       {/* Create Task Modal */}
       {isCreating && (
-        <div className="card p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">مهمة جديدة</h2>
-          <form onSubmit={handleCreate} className="space-y-4">
+        <div className="card p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">مهمة جديدة</h2>
+          <form onSubmit={handleCreate} className="space-y-3 sm:space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">عنوان المهمة</label>
               <input 
@@ -179,9 +179,9 @@ export default function AllTasksPage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">تاريخ البدء</label>
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">تاريخ البدء</label>
                 <input
                   type="date"
                   value={newTaskStartDate}
@@ -190,7 +190,7 @@ export default function AllTasksPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">تاريخ الانتهاء</label>
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">تاريخ الانتهاء</label>
                 <input
                   type="date"
                   value={newTaskDueDate}
@@ -200,9 +200,9 @@ export default function AllTasksPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">الأولوية</label>
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">الأولوية</label>
                 <select
                   value={newTaskPriority}
                   onChange={(e) => setNewTaskPriority(e.target.value as 'low' | 'medium' | 'high')}
@@ -216,7 +216,7 @@ export default function AllTasksPage() {
 
               {isManager && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">تعيين إلى</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">تعيين إلى</label>
                   <select
                     value={assigneeId}
                     onChange={(e) => setAssigneeId(e.target.value)}
@@ -235,7 +235,7 @@ export default function AllTasksPage() {
 
             {isManager && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">إسناد المراجعة إلى</label>
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">إسناد المراجعة إلى</label>
                 <select
                   value={reviewerId}
                   onChange={(e) => setReviewerId(e.target.value)}
@@ -251,11 +251,11 @@ export default function AllTasksPage() {
               </div>
             )}
 
-            <div className="flex gap-2 justify-end">
-              <button type="button" onClick={() => setIsCreating(false)} className="btn-secondary">
+            <div className="flex flex-col-reverse sm:flex-row gap-2 justify-end">
+              <button type="button" onClick={() => setIsCreating(false)} className="btn-secondary text-sm sm:text-base">
                 إلغاء
               </button>
-              <button type="submit" className="btn-primary">
+              <button type="submit" className="btn-primary text-sm sm:text-base">
                 حفظ المهمة
               </button>
             </div>
@@ -264,17 +264,17 @@ export default function AllTasksPage() {
       )}
 
       {/* Filters */}
-      <div className="card p-4">
+      <div className="card p-3 sm:p-4">
         {/* Search */}
-        <div className="mb-4">
+        <div className="mb-3 sm:mb-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="بحث عن مهمة..."
-              className="w-full rounded-md border-0 py-2 pr-3 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
+              className="w-full rounded-md border-0 py-2 pr-3 pl-10 text-sm sm:text-base text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600"
             />
           </div>
         </div>
@@ -283,7 +283,7 @@ export default function AllTasksPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {/* Status Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">الحالة</label>
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">الحالة</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -299,7 +299,7 @@ export default function AllTasksPage() {
 
           {/* Priority Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">الأولوية</label>
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">الأولوية</label>
             <select
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
@@ -315,7 +315,7 @@ export default function AllTasksPage() {
 
           {/* Assignee Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">المستلم</label>
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">المستلم</label>
             <select
               value={assigneeFilter}
               onChange={(e) => setAssigneeFilter(e.target.value)}
