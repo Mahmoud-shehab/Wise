@@ -12,6 +12,8 @@ export default function Layout() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
 
+  // Version: 2026-01-11-v2 - Notification icon on LEFT
+
   // جلب عدد الرسائل غير المقروءة
   useEffect(() => {
     if (!user) return;
