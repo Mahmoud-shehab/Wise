@@ -21,7 +21,7 @@ import MessagesPage from '@/routes/MessagesPage';
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter basename="/wise-task-manager/">
+      <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
           
