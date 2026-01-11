@@ -117,7 +117,7 @@ export default function NotificationDropdown() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-md hover:bg-white/10 text-white transition-colors"
+        className="relative p-2 rounded-md hover:bg-gray-100 lg:hover:bg-white/10 text-gray-700 lg:text-white transition-colors"
       >
         <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
@@ -128,7 +128,7 @@ export default function NotificationDropdown() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-[90vw] sm:w-80 max-w-sm bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50" dir="rtl" style={{ top: '100%' }}>
+        <div className="absolute left-0 lg:right-0 mt-2 w-[90vw] sm:w-80 max-w-sm bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50" dir="rtl" style={{ top: '100%' }}>
           <div className="p-3 sm:p-4 border-b border-gray-200">
             <div className="flex items-center justify-between">
               <h3 className="text-base sm:text-lg font-semibold text-gray-900">الإشعارات</h3>
