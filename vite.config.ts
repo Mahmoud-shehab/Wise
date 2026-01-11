@@ -5,7 +5,7 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/wise-task-manager/',
+  base: '/Wise/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -21,7 +21,7 @@ export default defineConfig({
         short_name: 'Wise Tasks',
         description: 'Task management for Wise Accounting',
         theme_color: '#ffffff',
-        start_url: '/wise-task-manager/',
+        start_url: '/Wise/',
         icons: [
           {
             src: 'pwa-192x192.png',
