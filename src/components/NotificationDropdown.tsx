@@ -28,9 +28,14 @@ export default function NotificationDropdown() {
     if (profile) {
       fetchNotifications();
       
-      // Subscribe to new notifications
+      // Subscribe to new notifications with better error handling
       const channel = supabase
-        .channel('notifications')
+        .channel('notifications-' + profile.id, {
+          config: {
+            broadcast: { self: true },
+            presence: { key: profile.id }
+          }
+        })
         .on(
           'postgres_changes',
           {
@@ -39,14 +44,41 @@ export default function NotificationDropdown() {
             table: 'notifications',
             filter: `user_id=eq.${profile.id}`,
           },
-          () => {
+          (payload) => {
+            console.log('📬 New notification received:', payload);
             fetchNotifications();
           }
         )
-        .subscribe();
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'notifications',
+            filter: `user_id=eq.${profile.id}`,
+          },
+          (payload) => {
+            console.log('🔄 Notification updated:', payload);
+            fetchNotifications();
+          }
+        )
+        .subscribe((status) => {
+          console.log('🔌 Notification subscription status:', status);
+        });
+
+      // Fallback: Poll for new notifications every 30 seconds on mobile
+      const isMobile = window.innerWidth < 1024;
+      let pollInterval: NodeJS.Timeout | null = null;
+      
+      if (isMobile) {
+        pollInterval = setInterval(() => {
+          fetchNotifications();
+        }, 30000); // Poll every 30 seconds
+      }
 
       return () => {
         supabase.removeChannel(channel);
+        if (pollInterval) clearInterval(pollInterval);
       };
     }
   }, [profile]);
