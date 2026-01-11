@@ -68,13 +68,11 @@ export default function Layout() {
     <div className="min-h-screen bg-gray-100 flex" dir="rtl">
       {/* Mobile menu button */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between bg-white/90 backdrop-blur-sm p-3 border-b border-gray-200 shadow-sm">
-        <div className="flex items-center gap-2">
-          <NotificationDropdown />
-          <span className="font-bold text-lg text-[#114fd1]">Wise Tasks</span>
-        </div>
         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-md hover:bg-gray-100">
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
+        <span className="font-bold text-lg text-[#114fd1]">Wise Tasks</span>
+        <NotificationDropdown />
       </div>
 
       {/* Sidebar */}
@@ -83,14 +81,11 @@ export default function Layout() {
         mobileMenuOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"
       )}>
         <div className="flex h-20 shrink-0 items-center px-6 border-b border-white/10">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-lg bg-white/10 text-white flex items-center justify-center shadow-md">
-                <span className="text-lg font-bold">W</span>
-              </div>
-              <span className="font-bold text-lg">Wise Tasks</span>
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-lg bg-white/10 text-white flex items-center justify-center shadow-md">
+              <span className="text-lg font-bold">W</span>
             </div>
-            <NotificationDropdown />
+            <span className="font-bold text-lg">Wise Tasks</span>
           </div>
         </div>
         <div className="flex flex-1 flex-col overflow-y-auto px-6 pb-4">
