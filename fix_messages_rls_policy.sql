@@ -1,11 +1,15 @@
 -- إصلاح صلاحيات جدول الرسائل (RLS Policy)
 -- شغل هذا الأمر في Supabase SQL Editor
 
--- 1. حذف الـ policies القديمة
-DROP POLICY IF EXISTS "Users can view their own messages" ON messages;
-DROP POLICY IF EXISTS "Users can send messages" ON messages;
-DROP POLICY IF EXISTS "Users can update their own messages" ON messages;
-DROP POLICY IF EXISTS "Users can delete their own messages" ON messages;
+-- 1. حذف جميع الـ policies الموجودة على جدول messages
+DO $$ 
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (SELECT policyname FROM pg_policies WHERE tablename = 'messages') LOOP
+        EXECUTE 'DROP POLICY IF EXISTS "' || r.policyname || '" ON messages';
+    END LOOP;
+END $$;
 
 -- 2. تعطيل RLS مؤقتاً
 ALTER TABLE messages DISABLE ROW LEVEL SECURITY;
@@ -14,7 +18,7 @@ ALTER TABLE messages DISABLE ROW LEVEL SECURITY;
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
 
 -- 4. إنشاء policy للقراءة (المستخدم يقدر يشوف الرسائل اللي هو مرسلها أو مستقبلها)
-CREATE POLICY "Users can view their messages"
+CREATE POLICY "messages_select_policy"
 ON messages
 FOR SELECT
 TO authenticated
@@ -23,7 +27,7 @@ USING (
 );
 
 -- 5. إنشاء policy للإضافة (أي مستخدم يقدر يبعت رسالة)
-CREATE POLICY "Users can send messages"
+CREATE POLICY "messages_insert_policy"
 ON messages
 FOR INSERT
 TO authenticated
@@ -32,7 +36,7 @@ WITH CHECK (
 );
 
 -- 6. إنشاء policy للتحديث (المستخدم يقدر يحدث الرسائل اللي هو مستقبلها فقط - علشان يعلمها مقروءة)
-CREATE POLICY "Users can update received messages"
+CREATE POLICY "messages_update_policy"
 ON messages
 FOR UPDATE
 TO authenticated
@@ -44,7 +48,7 @@ WITH CHECK (
 );
 
 -- 7. إنشاء policy للحذف (المستخدم يقدر يحذف الرسائل اللي هو مرسلها أو مستقبلها)
-CREATE POLICY "Users can delete their messages"
+CREATE POLICY "messages_delete_policy"
 ON messages
 FOR DELETE
 TO authenticated
@@ -59,9 +63,7 @@ SELECT
   policyname,
   permissive,
   roles,
-  cmd,
-  qual,
-  with_check
+  cmd
 FROM pg_policies
 WHERE tablename = 'messages'
 ORDER BY policyname;
