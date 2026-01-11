@@ -133,14 +133,16 @@ export default function MessagesPage() {
     }
 
     try {
-      const { error } = await supabase
+      const { data: messageData, error } = await supabase
         .from('messages' as any)
         .insert({
           sender_id: user?.id,
           receiver_id: newMessage.receiver_id,
           subject: newMessage.subject,
           body: newMessage.body
-        });
+        })
+        .select()
+        .single();
 
       if (error) {
         console.error('Error sending message:', error);
@@ -182,6 +184,24 @@ export default function MessagesPage() {
 الرجاء مراجعة Console للمزيد من التفاصيل.`);
         }
       } else {
+        // إنشاء إشعار للمستلم
+        const { data: senderProfile } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', user?.id || '')
+          .single();
+
+        await supabase
+          .from('notifications')
+          .insert({
+            user_id: newMessage.receiver_id,
+            type: 'message',
+            title: 'رسالة جديدة',
+            content: `رسالة جديدة من ${senderProfile?.full_name || 'مستخدم'}: ${newMessage.subject}`,
+            link: `/messages?msg=${(messageData as any)?.id || ''}`,
+            read: false
+          });
+
         alert('✅ تم إرسال الرسالة بنجاح');
         setShowCompose(false);
         setNewMessage({ receiver_id: '', subject: '', body: '' });
