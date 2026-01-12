@@ -180,27 +180,27 @@ export default function ReportsPage() {
 
       {/* Date Range Info */}
       <div className="card p-4 bg-blue-50 border-blue-200">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex items-center gap-3">
             <Calendar className="h-5 w-5 text-blue-600" />
             <div>
               <div className="text-sm font-semibold text-blue-900">فترة التقرير</div>
-              <div className="text-xs text-blue-700">{dateRangeText}</div>
+              <div className="text-xs text-blue-700 mt-0.5">{dateRangeText}</div>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="rounded-md border-0 py-1.5 text-sm text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 px-2"
+              className="rounded-md border-0 py-1.5 text-sm text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 px-2 w-full sm:w-auto"
             />
-            <span className="text-gray-500">-</span>
+            <span className="text-gray-500 self-center hidden sm:inline">-</span>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="rounded-md border-0 py-1.5 text-sm text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 px-2"
+              className="rounded-md border-0 py-1.5 text-sm text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 px-2 w-full sm:w-auto"
             />
           </div>
         </div>
@@ -247,24 +247,24 @@ export default function ReportsPage() {
       </div>
 
       {/* Priority Distribution */}
-      <div className="card p-6">
+      <div className="card p-4 sm:p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">توزيع الأولويات</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-3xl font-bold text-gray-900">{priorityStats.high}</div>
-            <div className="text-sm text-gray-600 mt-1">حرج</div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-lg">
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900">{priorityStats.high}</div>
+            <div className="text-xs sm:text-sm text-gray-600 mt-1">حرج</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-3xl font-bold text-gray-900">{priorityStats.medium}</div>
-            <div className="text-sm text-gray-600 mt-1">متوسط</div>
+          <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-lg">
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900">{priorityStats.medium}</div>
+            <div className="text-xs sm:text-sm text-gray-600 mt-1">متوسط</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-3xl font-bold text-gray-900">{priorityStats.low}</div>
-            <div className="text-sm text-gray-600 mt-1">عالي</div>
+          <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-lg">
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900">{priorityStats.low}</div>
+            <div className="text-xs sm:text-sm text-gray-600 mt-1">عالي</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-3xl font-bold text-gray-900">{priorityStats.low}</div>
-            <div className="text-sm text-gray-600 mt-1">منخفض</div>
+          <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-lg">
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900">{priorityStats.low}</div>
+            <div className="text-xs sm:text-sm text-gray-600 mt-1">منخفض</div>
           </div>
         </div>
       </div>
