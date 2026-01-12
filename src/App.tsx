@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from '@/features/auth/AuthContext';
 import Layout from '@/components/Layout';
 import AuthGuard from '@/components/AuthGuard';
+import RoleBasedRedirect from '@/components/RoleBasedRedirect';
 import Login from '@/features/auth/Login';
 import DashboardPage from '@/routes/DashboardPage';
 import TasksPage from '@/routes/TasksPage';
@@ -27,7 +28,7 @@ function App() {
           
           <Route element={<AuthGuard />}>
             <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/tasks" replace />} />
+              <Route path="/" element={<RoleBasedRedirect />} />
               <Route path="/tasks" element={<TasksPage />} />
               <Route path="/calendar" element={<CalendarPage />} />
               <Route path="/messages" element={<MessagesPage />} />
