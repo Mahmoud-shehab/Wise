@@ -139,16 +139,92 @@ export default function AdminPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('هل أنت متأكد من حذف هذا الموظف؟')) return;
+    if (!confirm('هل أنت متأكد من حذف هذا الموظف؟ سيتم إلغاء تعيين جميع المهام المرتبطة به.')) return;
     
     try {
-      const { error } = await supabase.from('profiles').delete().eq('id', id);
-      if (error) throw error;
+      setMessage('جاري الحذف...');
+      
+      // Step 1: Unassign all tasks assigned to this user
+      const { error: unassignError } = await supabase
+        .from('tasks')
+        .update({ assignee_id: null })
+        .eq('assignee_id', id);
+      
+      if (unassignError) {
+        console.error('Error unassigning tasks:', unassignError);
+        setMessage(`خطأ في إلغاء تعيين المهام: ${unassignError.message}`);
+        return;
+      }
+      
+      // Step 2: Update tasks created by this user to null
+      const { error: creatorError } = await supabase
+        .from('tasks')
+        .update({ created_by: null })
+        .eq('created_by', id);
+      
+      if (creatorError) {
+        console.error('Error updating task creator:', creatorError);
+      }
+      
+      // Step 3: Delete user's comments
+      const { error: commentsError } = await supabase
+        .from('comments')
+        .delete()
+        .eq('user_id', id);
+      
+      if (commentsError) {
+        console.error('Error deleting comments:', commentsError);
+      }
+      
+      // Step 4: Delete user's notifications
+      const { error: notificationsError } = await supabase
+        .from('notifications')
+        .delete()
+        .eq('user_id', id);
+      
+      if (notificationsError) {
+        console.error('Error deleting notifications:', notificationsError);
+      }
+      
+      // Step 5: Delete task reviewers
+      const { error: reviewersError } = await supabase
+        .from('task_reviewers')
+        .delete()
+        .eq('reviewer_id', id);
+      
+      if (reviewersError) {
+        console.error('Error deleting task reviewers:', reviewersError);
+      }
+      
+      // Step 6: Delete project members
+      const { error: membersError } = await supabase
+        .from('project_members')
+        .delete()
+        .eq('user_id', id);
+      
+      if (membersError) {
+        console.error('Error deleting project members:', membersError);
+      }
+      
+      // Step 7: Finally delete the profile
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', id);
+      
+      if (profileError) {
+        console.error('Error deleting profile:', profileError);
+        setMessage(`خطأ في حذف الموظف: ${profileError.message}`);
+        return;
+      }
+      
       await fetchEmployees();
       setMessage('تم حذف الموظف بنجاح');
       setTimeout(() => setMessage(''), 3000);
     } catch (err: any) {
-      setMessage(err.message);
+      console.error('Delete error:', err);
+      setMessage(`خطأ: ${err.message}`);
+      setTimeout(() => setMessage(''), 5000);
     }
   };
 
