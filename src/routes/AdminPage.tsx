@@ -139,117 +139,30 @@ export default function AdminPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('هل أنت متأكد من حذف هذا الموظف؟ سيتم إلغاء تعيين جميع المهام المرتبطة به.')) return;
+    if (!confirm('هل أنت متأكد من حذف هذا الموظف؟ سيتم حذف جميع البيانات المرتبطة به.')) return;
     
     try {
       setMessage('جاري الحذف...');
       
-      // Step 1: Delete task_activity records (has foreign key to profiles)
-      const { error: activityError } = await supabase
-        .from('task_activity')
-        .delete()
-        .eq('actor_id', id);
+      // Use the database function to delete user and all related data
+      // This bypasses RLS policies
+      // @ts-ignore - Function not in generated types yet
+      const { data, error } = await supabase.rpc('delete_user_cascade', {
+        user_id_to_delete: id
+      });
       
-      if (activityError) {
-        console.error('Error deleting task activity:', activityError);
-        setMessage(`خطأ في حذف سجل النشاطات: ${activityError.message}`);
+      if (error) {
+        console.error('Error deleting user:', error);
+        setMessage(`خطأ في حذف الموظف: ${error.message}`);
         return;
       }
       
-      // Step 2: Unassign all tasks assigned to this user
-      const { error: unassignError } = await supabase
-        .from('tasks')
-        .update({ assignee_id: null })
-        .eq('assignee_id', id);
-      
-      if (unassignError) {
-        console.error('Error unassigning tasks:', unassignError);
-        setMessage(`خطأ في إلغاء تعيين المهام: ${unassignError.message}`);
-        return;
-      }
-      
-      // Step 3: Update tasks created by this user to null
-      const { error: creatorError } = await supabase
-        .from('tasks')
-        .update({ created_by: null })
-        .eq('created_by', id);
-      
-      if (creatorError) {
-        console.error('Error updating task creator:', creatorError);
-      }
-      
-      // Step 4: Update tasks reviewer to null
-      const { error: reviewerError } = await supabase
-        .from('tasks')
-        .update({ reviewer_id: null })
-        .eq('reviewer_id', id);
-      
-      if (reviewerError) {
-        console.error('Error updating task reviewer:', reviewerError);
-      }
-      
-      // Step 5: Delete user's comments (ON DELETE SET NULL, but let's delete anyway)
-      const { error: commentsError } = await supabase
-        .from('task_comments')
-        .delete()
-        .eq('user_id', id);
-      
-      if (commentsError) {
-        console.error('Error deleting comments:', commentsError);
-      }
-      
-      // Step 6: Delete user's notifications (ON DELETE CASCADE)
-      const { error: notificationsError } = await supabase
-        .from('notifications')
-        .delete()
-        .eq('user_id', id);
-      
-      if (notificationsError) {
-        console.error('Error deleting notifications:', notificationsError);
-      }
-      
-      // Step 7: Delete task reviewers (ON DELETE CASCADE)
-      const { error: reviewersError } = await supabase
-        .from('task_reviewers')
-        .delete()
-        .eq('reviewer_id', id);
-      
-      if (reviewersError) {
-        console.error('Error deleting task reviewers:', reviewersError);
-      }
-      
-      // Step 8: Delete project members (ON DELETE CASCADE)
-      const { error: membersError } = await supabase
-        .from('project_members')
-        .delete()
-        .eq('user_id', id);
-      
-      if (membersError) {
-        console.error('Error deleting project members:', membersError);
-      }
-      
-      // Step 9: Update projects owner to null (ON DELETE SET NULL)
-      const { error: projectsError } = await supabase
-        .from('projects')
-        .update({ owner_id: null })
-        .eq('owner_id', id);
-      
-      if (projectsError) {
-        console.error('Error updating projects owner:', projectsError);
-      }
-      
-      // Note: task_attachments.uploaded_by and project_templates.created_by 
-      // have ON DELETE SET NULL, so they will be handled automatically
-      
-      // Step 10: Finally delete the profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .delete()
-        .eq('id', id);
-      
-      if (profileError) {
-        console.error('Error deleting profile:', profileError);
-        setMessage(`خطأ في حذف الموظف: ${profileError.message}`);
+      // @ts-ignore
+      if (data && !data.success) {
+        // @ts-ignore
+        console.error('Error from function:', data.message);
+        // @ts-ignore
+        setMessage(`خطأ في حذف الموظف: ${data.message}`);
         return;
       }
       
