@@ -26,7 +26,27 @@ export default function Login() {
         } else {
           const email = usernameOrEmail.includes('@') ? usernameOrEmail : `${usernameOrEmail}@wise.com`;
           await loginDemo?.(email);
-          navigate('/');
+          
+          // انتظر قليلاً لتحميل الـ profile
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // جلب الـ profile للتحقق من الدور
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('role')
+              .eq('id', user.id)
+              .single();
+            
+            if (profile?.role === 'manager') {
+              navigate('/dashboard');
+            } else {
+              navigate('/tasks');
+            }
+          } else {
+            navigate('/');
+          }
         }
       } else {
         let email = usernameOrEmail;
@@ -50,7 +70,26 @@ export default function Login() {
             throw error;
           }
         } else {
-          navigate('/');
+          // انتظر قليلاً لتحميل الـ profile
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // جلب الـ profile للتحقق من الدور
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('role')
+              .eq('id', user.id)
+              .single();
+            
+            if (profile?.role === 'manager') {
+              navigate('/dashboard');
+            } else {
+              navigate('/tasks');
+            }
+          } else {
+            navigate('/');
+          }
         }
       }
     } catch (error: any) {
