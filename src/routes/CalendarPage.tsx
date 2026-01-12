@@ -1,16 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/features/auth/AuthContext';
 import { useTasks } from '@/features/tasks/useTasks';
+import { supabase } from '@/lib/supabaseClient';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, startOfWeek, endOfWeek } from 'date-fns';
 import { ar } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 
+type Profile = {
+  id: string;
+  full_name: string | null;
+};
+
 export default function CalendarPage() {
   const { profile, user } = useAuth();
   const { tasks, loading } = useTasks();
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [profiles, setProfiles] = useState<Profile[]>([]);
   const isManager = profile?.role === 'manager';
+
+  // جلب بيانات الموظفين
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('id, full_name');
+      if (data) setProfiles(data);
+    };
+    fetchProfiles();
+  }, []);
+
+  // الحصول على اسم الموظف
+  const getEmployeeName = (assigneeId: string | null) => {
+    if (!assigneeId) return 'غير مسند';
+    const employee = profiles.find(p => p.id === assigneeId);
+    return employee?.full_name || 'غير معروف';
+  };
 
   // فلترة المهام حسب الدور
   const filteredTasks = tasks.filter(task => {
@@ -141,6 +166,11 @@ export default function CalendarPage() {
                       <div className="font-semibold text-gray-900 truncate">
                         {task.title}
                       </div>
+                      {isManager && task.assignee_id && (
+                        <div className="text-xs text-gray-600 mt-0.5 truncate">
+                          👤 {getEmployeeName(task.assignee_id)}
+                        </div>
+                      )}
                       {task.due_date && isSameDay(new Date(task.due_date), day) && (
                         <div className="text-xs text-gray-600 mt-0.5">
                           📅 موعد الانتهاء
