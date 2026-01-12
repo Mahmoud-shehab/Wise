@@ -71,7 +71,10 @@ export default function AdminPage() {
           email,
           password,
           options: {
-            data: { full_name: fullName }
+            data: { 
+              full_name: fullName,
+              role: role  // Pass role in metadata
+            }
           }
         });
         
@@ -82,13 +85,18 @@ export default function AdminPage() {
         }
         
         if (data.user) {
-          // Insert profile
-          const { error: insertErr } = await supabase
-            .from('profiles')
-            .insert({ id: data.user.id, full_name: fullName, role });
+          // Update profile with correct role (trigger already created it with default role)
+          // Use a small delay to ensure trigger has completed
+          await new Promise(resolve => setTimeout(resolve, 500));
           
-          if (insertErr) {
-            console.error('Error inserting profile:', insertErr);
+          const { error: updateErr } = await supabase
+            .from('profiles')
+            .update({ full_name: fullName, role })
+            .eq('id', data.user.id);
+          
+          if (updateErr) {
+            console.error('Error updating profile:', updateErr);
+            setMessage(`تم إنشاء المستخدم لكن حدث خطأ في تحديث الصلاحية: ${updateErr.message}`);
           }
           
           // IMPORTANT: Immediately restore admin session
