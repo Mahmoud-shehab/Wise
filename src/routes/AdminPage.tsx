@@ -55,6 +55,22 @@ export default function AdminPage() {
         }
         setMessage('تم تحديث الموظف بنجاح');
       } else {
+        // Validate inputs before creating
+        if (!fullName || fullName.trim().length < 2) {
+          setMessage('خطأ: الاسم الكامل يجب أن يكون حرفين على الأقل');
+          return;
+        }
+        
+        if (!email || !email.includes('@')) {
+          setMessage('خطأ: البريد الإلكتروني غير صحيح');
+          return;
+        }
+        
+        if (!password || password.length < 6) {
+          setMessage('خطأ: كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+          return;
+        }
+        
         // Create new employee
         // We'll use signUp but immediately restore the admin session
         
@@ -80,7 +96,16 @@ export default function AdminPage() {
         
         if (error) {
           console.error('Error creating user:', error);
-          setMessage(`خطأ في إنشاء المستخدم: ${error.message}`);
+          // Translate common errors to Arabic
+          let errorMessage = error.message;
+          if (error.message.includes('Password should be at least')) {
+            errorMessage = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+          } else if (error.message.includes('already registered')) {
+            errorMessage = 'البريد الإلكتروني مسجل بالفعل';
+          } else if (error.message.includes('Invalid email')) {
+            errorMessage = 'البريد الإلكتروني غير صحيح';
+          }
+          setMessage(`خطأ في إنشاء المستخدم: ${errorMessage}`);
           return;
         }
         
@@ -272,10 +297,14 @@ export default function AdminPage() {
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="********"
+                      placeholder="6 أحرف على الأقل"
+                      minLength={6}
                       className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
                       required
                     />
+                    {password && password.length > 0 && password.length < 6 && (
+                      <p className="mt-1 text-xs text-red-600">⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل</p>
+                    )}
                   </div>
                 </>
               )}
