@@ -144,7 +144,19 @@ export default function AdminPage() {
     try {
       setMessage('جاري الحذف...');
       
-      // Step 1: Unassign all tasks assigned to this user
+      // Step 1: Delete task_activity records (has foreign key to profiles)
+      const { error: activityError } = await supabase
+        .from('task_activity')
+        .delete()
+        .eq('actor_id', id);
+      
+      if (activityError) {
+        console.error('Error deleting task activity:', activityError);
+        setMessage(`خطأ في حذف سجل النشاطات: ${activityError.message}`);
+        return;
+      }
+      
+      // Step 2: Unassign all tasks assigned to this user
       const { error: unassignError } = await supabase
         .from('tasks')
         .update({ assignee_id: null })
@@ -156,7 +168,7 @@ export default function AdminPage() {
         return;
       }
       
-      // Step 2: Update tasks created by this user to null
+      // Step 3: Update tasks created by this user to null
       const { error: creatorError } = await supabase
         .from('tasks')
         .update({ created_by: null })
@@ -166,7 +178,17 @@ export default function AdminPage() {
         console.error('Error updating task creator:', creatorError);
       }
       
-      // Step 3: Delete user's comments
+      // Step 4: Update tasks reviewer to null
+      const { error: reviewerError } = await supabase
+        .from('tasks')
+        .update({ reviewer_id: null })
+        .eq('reviewer_id', id);
+      
+      if (reviewerError) {
+        console.error('Error updating task reviewer:', reviewerError);
+      }
+      
+      // Step 5: Delete user's comments (ON DELETE SET NULL, but let's delete anyway)
       const { error: commentsError } = await supabase
         .from('task_comments')
         .delete()
@@ -176,7 +198,7 @@ export default function AdminPage() {
         console.error('Error deleting comments:', commentsError);
       }
       
-      // Step 4: Delete user's notifications
+      // Step 6: Delete user's notifications (ON DELETE CASCADE)
       const { error: notificationsError } = await supabase
         .from('notifications')
         .delete()
@@ -186,7 +208,7 @@ export default function AdminPage() {
         console.error('Error deleting notifications:', notificationsError);
       }
       
-      // Step 5: Delete task reviewers
+      // Step 7: Delete task reviewers (ON DELETE CASCADE)
       const { error: reviewersError } = await supabase
         .from('task_reviewers')
         .delete()
@@ -196,7 +218,7 @@ export default function AdminPage() {
         console.error('Error deleting task reviewers:', reviewersError);
       }
       
-      // Step 6: Delete project members
+      // Step 8: Delete project members (ON DELETE CASCADE)
       const { error: membersError } = await supabase
         .from('project_members')
         .delete()
@@ -206,7 +228,20 @@ export default function AdminPage() {
         console.error('Error deleting project members:', membersError);
       }
       
-      // Step 7: Finally delete the profile
+      // Step 9: Update projects owner to null (ON DELETE SET NULL)
+      const { error: projectsError } = await supabase
+        .from('projects')
+        .update({ owner_id: null })
+        .eq('owner_id', id);
+      
+      if (projectsError) {
+        console.error('Error updating projects owner:', projectsError);
+      }
+      
+      // Note: task_attachments.uploaded_by and project_templates.created_by 
+      // have ON DELETE SET NULL, so they will be handled automatically
+      
+      // Step 10: Finally delete the profile
       const { error: profileError } = await supabase
         .from('profiles')
         .delete()
