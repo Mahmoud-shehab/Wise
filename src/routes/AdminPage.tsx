@@ -168,7 +168,7 @@ export default function AdminPage() {
       
       // Step 3: Delete user's comments
       const { error: commentsError } = await supabase
-        .from('comments')
+        .from('task_comments')
         .delete()
         .eq('user_id', id);
       
