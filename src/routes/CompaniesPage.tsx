@@ -224,81 +224,280 @@ export default function CompaniesPage() {
       {/* Create/Edit Form */}
       {isCreating && (
         <div className="card p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">
             {editingCompany ? 'تعديل الشركة' : 'شركة جديدة'}
           </h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  اسم الشركة
-                </label>
-                <input
-                  type="text"
-                  value={formName}
-                  onChange={(e) => setFormName(e.target.value)}
-                  placeholder="مثال: DEBI"
-                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  الاسم القانوني
-                </label>
-                <input
-                  type="text"
-                  value={formLegalName}
-                  onChange={(e) => setFormLegalName(e.target.value)}
-                  placeholder="مثال: ديبي"
-                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  القطاع
-                </label>
-                <input
-                  type="text"
-                  value={formSector}
-                  onChange={(e) => setFormSector(e.target.value)}
-                  placeholder="مثال: تكنولوجيا، تجارة، صناعة..."
-                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  المطلوبات
-                </label>
-                <input
-                  type="text"
-                  value={formRequiredFields}
-                  onChange={(e) => setFormRequiredFields(e.target.value)}
-                  placeholder="مثال: رخصة تجارية، سجل ضريبي..."
-                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
-                />
-              </div>
-            </div>
-
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Basic Information */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                ملاحظات (اختياري)
-              </label>
-              <textarea
-                value={formNotes}
-                onChange={(e) => setFormNotes(e.target.value)}
-                placeholder="أي ملاحظات إضافية..."
-                rows={3}
-                className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
-              />
+              <h3 className="text-md font-semibold text-gray-800 mb-3 pb-2 border-b">
+                البيانات الأساسية
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    اسم الشركة <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formName}
+                    onChange={(e) => setFormName(e.target.value)}
+                    placeholder="مثال: DEBI"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    الكيان القانوني <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formLegalName}
+                    onChange={(e) => setFormLegalName(e.target.value)}
+                    placeholder="مثال: ديبي"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    القطاع <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formSector}
+                    onChange={(e) => setFormSector(e.target.value)}
+                    placeholder="مثال: تكنولوجيا، تجارة، صناعة..."
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    عنوان الشركة
+                  </label>
+                  <input
+                    type="text"
+                    value={formAddress}
+                    onChange={(e) => setFormAddress(e.target.value)}
+                    placeholder="مثال: القاهرة، مصر الجديدة..."
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+              </div>
             </div>
 
-            <div className="flex gap-2 justify-end pt-2">
+            {/* Contact Information */}
+            <div>
+              <h3 className="text-md font-semibold text-gray-800 mb-3 pb-2 border-b">
+                بيانات التواصل
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    رقم تليفون
+                  </label>
+                  <input
+                    type="tel"
+                    value={formPhone}
+                    onChange={(e) => setFormPhone(e.target.value)}
+                    placeholder="مثال: 0223456789"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    شخص التواصل
+                  </label>
+                  <input
+                    type="text"
+                    value={formContactPerson}
+                    onChange={(e) => setFormContactPerson(e.target.value)}
+                    placeholder="مثال: أحمد محمد"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    رقم موبايل
+                  </label>
+                  <input
+                    type="tel"
+                    value={formMobile}
+                    onChange={(e) => setFormMobile(e.target.value)}
+                    placeholder="مثال: 01012345678"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    البريد الإلكتروني (يمكن إضافة أكثر من بريد)
+                  </label>
+                  <input
+                    type="text"
+                    value={formEmails}
+                    onChange={(e) => setFormEmails(e.target.value)}
+                    placeholder="مثال: info@company.com, sales@company.com"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Tax Portal Data */}
+            <div>
+              <h3 className="text-md font-semibold text-gray-800 mb-3 pb-2 border-b">
+                بيانات بوابة الضرائب
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    رقم التسجيل الضريبي
+                  </label>
+                  <input
+                    type="text"
+                    value={taxRegistrationNumber}
+                    onChange={(e) => setTaxRegistrationNumber(e.target.value)}
+                    placeholder="مثال: 123-456-789"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    رقم الملف الضريبي
+                  </label>
+                  <input
+                    type="text"
+                    value={taxFileNumber}
+                    onChange={(e) => setTaxFileNumber(e.target.value)}
+                    placeholder="مثال: 987-654-321"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    المأمورية التابعة
+                  </label>
+                  <input
+                    type="text"
+                    value={taxOffice}
+                    onChange={(e) => setTaxOffice(e.target.value)}
+                    placeholder="مثال: مأمورية القاهرة"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    البريد الإلكتروني المسجل
+                  </label>
+                  <input
+                    type="email"
+                    value={registeredEmail}
+                    onChange={(e) => setRegisteredEmail(e.target.value)}
+                    placeholder="مثال: tax@company.com"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    رقم التليفون المسجل
+                  </label>
+                  <input
+                    type="tel"
+                    value={registeredPhone}
+                    onChange={(e) => setRegisteredPhone(e.target.value)}
+                    placeholder="مثال: 01012345678"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    اسم المستخدم
+                  </label>
+                  <input
+                    type="text"
+                    value={taxUsername}
+                    onChange={(e) => setTaxUsername(e.target.value)}
+                    placeholder="اسم المستخدم في بوابة الضرائب"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    الرقم السري
+                  </label>
+                  <input
+                    type="password"
+                    value={taxPassword}
+                    onChange={(e) => setTaxPassword(e.target.value)}
+                    placeholder="كلمة المرور"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    بيانات أخرى
+                  </label>
+                  <textarea
+                    value={otherTaxData}
+                    onChange={(e) => setOtherTaxData(e.target.value)}
+                    placeholder="أي بيانات إضافية متعلقة بالضرائب..."
+                    rows={2}
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Notes */}
+            <div>
+              <h3 className="text-md font-semibold text-gray-800 mb-3 pb-2 border-b">
+                معلومات إضافية
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    المطلوبات
+                  </label>
+                  <input
+                    type="text"
+                    value={formRequiredFields}
+                    onChange={(e) => setFormRequiredFields(e.target.value)}
+                    placeholder="مثال: رخصة تجارية، سجل ضريبي..."
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ملاحظات (اختياري)
+                  </label>
+                  <textarea
+                    value={formNotes}
+                    onChange={(e) => setFormNotes(e.target.value)}
+                    placeholder="أي ملاحظات إضافية..."
+                    rows={3}
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-2 justify-end pt-4 border-t">
               <button
                 type="button"
                 onClick={handleCancel}
@@ -359,7 +558,7 @@ export default function CompaniesPage() {
                       القطاع
                     </th>
                     <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      المطلوبات
+                      التواصل
                     </th>
                     <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       الإجراءات
@@ -369,17 +568,30 @@ export default function CompaniesPage() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredCompanies.map((company) => (
                     <tr key={company.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-4">
                         <div className="text-sm font-semibold text-gray-900">{company.name}</div>
+                        {company.address && (
+                          <div className="text-xs text-gray-500 mt-1">{company.address}</div>
+                        )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-4">
                         <div className="text-sm text-gray-900">{company.legal_name}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{company.sector}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{company.required_fields}</div>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-900 space-y-1">
+                          {company.contact_person && (
+                            <div className="text-xs">👤 {company.contact_person}</div>
+                          )}
+                          {company.mobile && (
+                            <div className="text-xs">📱 {company.mobile}</div>
+                          )}
+                          {company.phone && (
+                            <div className="text-xs">☎️ {company.phone}</div>
+                          )}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex items-center gap-2">
@@ -440,16 +652,28 @@ export default function CompaniesPage() {
                       <span className="text-xs font-medium text-gray-500 w-20 flex-shrink-0">القطاع:</span>
                       <span className="text-sm text-gray-900">{company.sector}</span>
                     </div>
-                    {company.required_fields && (
+                    {company.address && (
                       <div className="flex items-start">
-                        <span className="text-xs font-medium text-gray-500 w-20 flex-shrink-0">المطلوبات:</span>
-                        <span className="text-sm text-gray-900">{company.required_fields}</span>
+                        <span className="text-xs font-medium text-gray-500 w-20 flex-shrink-0">العنوان:</span>
+                        <span className="text-sm text-gray-900">{company.address}</span>
                       </div>
                     )}
-                    {company.notes && (
+                    {company.contact_person && (
                       <div className="flex items-start">
-                        <span className="text-xs font-medium text-gray-500 w-20 flex-shrink-0">ملاحظات:</span>
-                        <span className="text-sm text-gray-900">{company.notes}</span>
+                        <span className="text-xs font-medium text-gray-500 w-20 flex-shrink-0">التواصل:</span>
+                        <span className="text-sm text-gray-900">{company.contact_person}</span>
+                      </div>
+                    )}
+                    {company.mobile && (
+                      <div className="flex items-start">
+                        <span className="text-xs font-medium text-gray-500 w-20 flex-shrink-0">موبايل:</span>
+                        <span className="text-sm text-gray-900">{company.mobile}</span>
+                      </div>
+                    )}
+                    {company.phone && (
+                      <div className="flex items-start">
+                        <span className="text-xs font-medium text-gray-500 w-20 flex-shrink-0">تليفون:</span>
+                        <span className="text-sm text-gray-900">{company.phone}</span>
                       </div>
                     )}
                   </div>
