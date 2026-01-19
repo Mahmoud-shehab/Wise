@@ -22,6 +22,7 @@ export default function AllTasksPage() {
   const [companyId, setCompanyId] = useState<string | ''>('');
   const [taskTypeId, setTaskTypeId] = useState<string | ''>('');
   const [period, setPeriod] = useState('');
+  const [customPeriod, setCustomPeriod] = useState('');
   const [attachments, setAttachments] = useState<File[]>([]);
   
   // Filters
@@ -57,8 +58,7 @@ export default function AllTasksPage() {
     'الربع الثاني',
     'الربع الثالث',
     'الربع الرابع',
-    'سنوي',
-    'خانة كتابة'
+    'سنوي'
   ];
 
   useEffect(() => {
@@ -180,6 +180,7 @@ export default function AllTasksPage() {
       setCompanyId('');
       setTaskTypeId('');
       setPeriod('');
+      setCustomPeriod('');
       setAttachments([]);
     } catch (error) {
       console.error(error);
@@ -266,18 +267,35 @@ export default function AllTasksPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   الفترة
                 </label>
-                <select
-                  value={period}
-                  onChange={(e) => setPeriod(e.target.value)}
-                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
-                >
-                  <option value=""></option>
-                  {periodOptions.map((p, idx) => (
-                    <option key={idx} value={p}>
-                      {p}
-                    </option>
-                  ))}
-                </select>
+                {period === 'custom' ? (
+                  <input
+                    type="text"
+                    value={customPeriod}
+                    onChange={(e) => setCustomPeriod(e.target.value)}
+                    placeholder="اكتب الفترة..."
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                    autoFocus
+                  />
+                ) : (
+                  <select
+                    value={period}
+                    onChange={(e) => {
+                      setPeriod(e.target.value);
+                      if (e.target.value !== 'custom') {
+                        setCustomPeriod('');
+                      }
+                    }}
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
+                  >
+                    <option value=""></option>
+                    {periodOptions.map((p, idx) => (
+                      <option key={idx} value={p}>
+                        {p}
+                      </option>
+                    ))}
+                    <option value="custom">خانة كتابة</option>
+                  </select>
+                )}
               </div>
             </div>
 
