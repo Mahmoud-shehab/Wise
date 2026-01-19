@@ -1,20 +1,22 @@
--- Update task status and priority enums
+-- Update task status and priority check constraints
 
--- First, add the new values to the enum types
-ALTER TYPE task_status ADD VALUE IF NOT EXISTS 'open';
-ALTER TYPE task_priority ADD VALUE IF NOT EXISTS 'critical';
-
--- Update existing tasks to map old statuses to new ones
+-- First, update existing data to match new values
 UPDATE tasks SET status = 'open' WHERE status IN ('backlog', 'assigned');
-UPDATE tasks SET status = 'in_progress' WHERE status = 'in_progress';
-UPDATE tasks SET status = 'done' WHERE status IN ('done', 'pending_review', 'blocked');
+UPDATE tasks SET status = 'done' WHERE status IN ('pending_review', 'blocked');
+-- in_progress stays the same
 
--- Note: We cannot remove enum values in PostgreSQL without recreating the type
--- So we'll keep the old values but they won't be used in the UI
--- If you want to completely remove old values, you need to:
--- 1. Create new enum types
--- 2. Alter the column to use the new type
--- 3. Drop the old type
+-- Drop old check constraints
+ALTER TABLE tasks DROP CONSTRAINT IF EXISTS tasks_status_check;
+ALTER TABLE tasks DROP CONSTRAINT IF EXISTS tasks_priority_check;
 
--- For now, we'll just ensure the application uses only: open, in_progress, done
--- And for priority: low, medium, high, critical
+-- Add new check constraints with updated values
+ALTER TABLE tasks ADD CONSTRAINT tasks_status_check 
+  CHECK (status IN ('open', 'in_progress', 'done'));
+
+ALTER TABLE tasks ADD CONSTRAINT tasks_priority_check 
+  CHECK (priority IN ('low', 'medium', 'high', 'critical'));
+
+-- Update default value for status
+ALTER TABLE tasks ALTER COLUMN status SET DEFAULT 'open';
+
+
