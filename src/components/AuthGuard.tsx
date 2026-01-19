@@ -1,7 +1,7 @@
 import { useAuth } from '@/features/auth/AuthContext';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
-export default function AuthGuard({ requireManager = false }: { requireManager?: boolean }) {
+export default function AuthGuard({ requireManager = false, requireFullManager = false }: { requireManager?: boolean; requireFullManager?: boolean }) {
   const { session, loading, profile } = useAuth();
   const location = useLocation();
 
@@ -13,8 +13,14 @@ export default function AuthGuard({ requireManager = false }: { requireManager?:
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (requireManager && profile?.role !== 'manager') {
-    return <div className="p-8 text-center text-red-600">Access Denied: Managers only.</div>;
+  // requireFullManager: للصفحات اللي المدير فقط يقدر يوصلها (الشركاء والشركات)
+  if (requireFullManager && profile?.role !== 'manager') {
+    return <div className="p-8 text-center text-red-600">صلاحية المدير فقط</div>;
+  }
+
+  // requireManager: للصفحات اللي المدير ومساعد المدير يقدروا يوصلوها
+  if (requireManager && profile?.role !== 'manager' && profile?.role !== 'assistant_manager') {
+    return <div className="p-8 text-center text-red-600">صلاحية المدير أو مساعد المدير فقط</div>;
   }
 
   return <Outlet />;

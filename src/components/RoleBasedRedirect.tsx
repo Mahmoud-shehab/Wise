@@ -10,11 +10,11 @@ export default function RoleBasedRedirect() {
     </div>;
   }
 
-  // المدير يروح للوحة التحكم
-  if (profile?.role === 'manager') {
+  // المدير ومساعد المدير يروحوا للوحة التحكم
+  if (profile?.role === 'manager' || profile?.role === 'assistant_manager') {
     return <Navigate to="/dashboard" replace />;
   }
 
-  // الموظف يروح لصفحة مهامي
+  // الشريك يروح لصفحة مهامي
   return <Navigate to="/tasks" replace />;
 }

@@ -19,7 +19,7 @@ export default function CalendarPage() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const isManager = profile?.role === 'manager';
 
-  // جلب بيانات الموظفين
+  // جلب بيانات الشركاء
   useEffect(() => {
     const fetchProfiles = async () => {
       const { data } = await supabase
@@ -30,7 +30,7 @@ export default function CalendarPage() {
     fetchProfiles();
   }, []);
 
-  // الحصول على اسم الموظف
+  // الحصول على اسم الشريك
   const getEmployeeName = (assigneeId: string | null) => {
     if (!assigneeId) return 'غير مسند';
     const employee = profiles.find(p => p.id === assigneeId);
@@ -42,7 +42,7 @@ export default function CalendarPage() {
     if (isManager) {
       return true; // المدير يرى كل المهام
     } else {
-      return task.assignee_id === user?.id; // الموظف يرى مهامه فقط
+      return task.assignee_id === user?.id; // الشريك يرى مهامه فقط
     }
   });
 

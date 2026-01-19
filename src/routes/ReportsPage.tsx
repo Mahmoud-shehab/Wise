@@ -160,7 +160,7 @@ export default function ReportsPage() {
           {/* Employee Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              جميع الموظفين
+              جميع الشركاء
             </label>
             <select
               value={selectedEmployee}

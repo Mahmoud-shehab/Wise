@@ -355,7 +355,7 @@ export default function MessagesPage() {
                     <option value="">اختر المستلم...</option>
                     {users.map(u => (
                       <option key={u.id} value={u.id}>
-                        {u.full_name || u.id.slice(0, 8)} ({u.role === 'manager' ? 'مدير' : 'موظف'})
+                        {u.full_name || u.id.slice(0, 8)} ({u.role === 'manager' ? 'مدير' : 'شريك'})
                       </option>
                     ))}
                   </select>

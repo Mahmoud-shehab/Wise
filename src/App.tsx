@@ -35,16 +35,20 @@ function App() {
               <Route path="/review" element={<ReviewPage />} />
               <Route path="/tasks/:id" element={<TaskDetailsPage />} />
               
-              {/* Manager-only routes */}
+              {/* Manager and Assistant Manager routes */}
               <Route element={<AuthGuard requireManager />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/all-tasks" element={<AllTasksPage />} />
                 <Route path="/task-types" element={<TaskTypesPage />} />
-                <Route path="/companies" element={<CompaniesPage />} />
                 <Route path="/reports" element={<ReportsPage />} />
+              </Route>
+              
+              {/* Full Manager only routes (not for assistant_manager) */}
+              <Route element={<AuthGuard requireFullManager />}>
+                <Route path="/companies" element={<CompaniesPage />} />
+                <Route path="/admin" element={<AdminPage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
                 <Route path="/projects/:id" element={<ProjectDetailPage />} />
-                <Route path="/admin" element={<AdminPage />} />
               </Route>
             </Route>
           </Route>

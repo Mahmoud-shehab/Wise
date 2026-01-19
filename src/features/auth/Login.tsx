@@ -39,7 +39,7 @@ export default function Login() {
               .eq('id', user.id)
               .single();
             
-            if (profile?.role === 'manager') {
+            if (profile?.role === 'manager' || profile?.role === 'assistant_manager') {
               navigate('/dashboard');
             } else {
               navigate('/tasks');
@@ -82,7 +82,7 @@ export default function Login() {
               .eq('id', user.id)
               .single();
             
-            if (profile?.role === 'manager') {
+            if (profile?.role === 'manager' || profile?.role === 'assistant_manager') {
               navigate('/dashboard');
             } else {
               navigate('/tasks');

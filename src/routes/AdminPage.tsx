@@ -16,7 +16,7 @@ export default function AdminPage() {
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<'employee' | 'manager'>('employee');
+  const [role, setRole] = useState<'employee' | 'manager' | 'assistant_manager'>('employee');
   
   const [creating, setCreating] = useState(false);
   const [message, setMessage] = useState('');
@@ -53,7 +53,7 @@ export default function AdminPage() {
           setMessage(`خطأ في التحديث: ${error.message}`);
           return;
         }
-        setMessage('تم تحديث الموظف بنجاح');
+        setMessage('تم تحديث الشريك بنجاح');
       } else {
         // Validate inputs before creating
         if (!fullName || fullName.trim().length < 2) {
@@ -133,9 +133,9 @@ export default function AdminPage() {
           
           if (sessionError) {
             console.error('Error restoring session:', sessionError);
-            setMessage('تم إنشاء الموظف لكن حدث خطأ في استعادة جلستك. الرجاء تسجيل الدخول مرة أخرى.');
+            setMessage('تم إنشاء الشريك لكن حدث خطأ في استعادة جلستك. الرجاء تسجيل الدخول مرة أخرى.');
           } else {
-            setMessage('تم إضافة الموظف بنجاح');
+            setMessage('تم إضافة الشريك بنجاح');
           }
         }
       }
@@ -164,7 +164,7 @@ export default function AdminPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('هل أنت متأكد من حذف هذا الموظف؟ سيتم حذف جميع البيانات المرتبطة به.')) return;
+    if (!confirm('هل أنت متأكد من حذف هذا الشريك؟ سيتم حذف جميع البيانات المرتبطة به.')) return;
     
     try {
       setMessage('جاري الحذف...');
@@ -178,7 +178,7 @@ export default function AdminPage() {
       
       if (error) {
         console.error('Error deleting user:', error);
-        setMessage(`خطأ في حذف الموظف: ${error.message}`);
+        setMessage(`خطأ في حذف الشريك: ${error.message}`);
         return;
       }
       
@@ -187,12 +187,12 @@ export default function AdminPage() {
         // @ts-ignore
         console.error('Error from function:', data.message);
         // @ts-ignore
-        setMessage(`خطأ في حذف الموظف: ${data.message}`);
+        setMessage(`خطأ في حذف الشريك: ${data.message}`);
         return;
       }
       
       await fetchEmployees();
-      setMessage('تم حذف الموظف بنجاح');
+      setMessage('تم حذف الشريك بنجاح');
       setTimeout(() => setMessage(''), 3000);
     } catch (err: any) {
       console.error('Delete error:', err);
@@ -220,12 +220,12 @@ export default function AdminPage() {
     <div className="space-y-6" dir="rtl">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">إدارة الموظفين</h1>
+        <h1 className="text-2xl font-bold text-gray-900">إدارة الشركاء</h1>
         <button
           onClick={() => setIsCreating(true)}
           className="flex items-center gap-2 btn-primary"
         >
-          <Plus className="h-4 w-4" /> إضافة موظف
+          <Plus className="h-4 w-4" /> إضافة شريك
         </button>
       </div>
 
@@ -233,7 +233,7 @@ export default function AdminPage() {
       {isCreating && (
         <div className="card p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            {editingEmployee ? 'تعديل الموظف' : 'موظف جديد'}
+            {editingEmployee ? 'تعديل الشريك' : 'شريك جديد'}
           </h2>
           
           {message && (
@@ -315,10 +315,11 @@ export default function AdminPage() {
                 </label>
                 <select
                   value={role}
-                  onChange={(e) => setRole(e.target.value as 'employee' | 'manager')}
+                  onChange={(e) => setRole(e.target.value as 'employee' | 'manager' | 'assistant_manager')}
                   className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
                 >
-                  <option value="employee">موظف</option>
+                  <option value="employee">شريك</option>
+                  <option value="assistant_manager">مساعد المدير</option>
                   <option value="manager">مدير</option>
                 </select>
               </div>
@@ -333,7 +334,7 @@ export default function AdminPage() {
                 إلغاء
               </button>
               <button type="submit" disabled={creating} className="btn-primary">
-                {creating ? 'جاري الحفظ...' : editingEmployee ? 'حفظ التعديلات' : 'إضافة الموظف'}
+                {creating ? 'جاري الحفظ...' : editingEmployee ? 'حفظ التعديلات' : 'إضافة الشريك'}
               </button>
             </div>
           </form>
@@ -348,7 +349,7 @@ export default function AdminPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="بحث عن موظف..."
+            placeholder="بحث عن شريك..."
             className="w-full rounded-md border-0 py-2 pr-3 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm"
           />
         </div>
@@ -362,10 +363,10 @@ export default function AdminPage() {
               <Users className="h-8 w-8" />
             </div>
             <h3 className="mt-4 text-lg font-semibold text-gray-900">
-              لا يوجد موظفين
+              لا يوجد شركاء
             </h3>
             <p className="mt-2 text-sm text-gray-500">
-              ابدأ بإضافة الموظفين لإدارة المهام
+              ابدأ بإضافة الشركاء لإدارة المهام
             </p>
           </div>
         ) : (
@@ -406,9 +407,11 @@ export default function AdminPage() {
                           <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
                             employee.role === 'manager' 
                               ? 'bg-purple-100 text-purple-800' 
-                              : 'bg-blue-100 text-blue-800'
+                              : employee.role === 'assistant_manager'
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-green-100 text-green-800'
                           }`}>
-                            {employee.role === 'manager' ? 'مدير' : 'موظف'}
+                            {employee.role === 'manager' ? 'مدير' : employee.role === 'assistant_manager' ? 'مساعد المدير' : 'شريك'}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -451,9 +454,11 @@ export default function AdminPage() {
                       <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
                         employee.role === 'manager' 
                           ? 'bg-purple-100 text-purple-800' 
-                          : 'bg-blue-100 text-blue-800'
+                          : employee.role === 'assistant_manager'
+                          ? 'bg-blue-100 text-blue-800'
+                          : 'bg-green-100 text-green-800'
                       }`}>
-                        {employee.role === 'manager' ? 'مدير' : 'موظف'}
+                        {employee.role === 'manager' ? 'مدير' : employee.role === 'assistant_manager' ? 'مساعد المدير' : 'شريك'}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">

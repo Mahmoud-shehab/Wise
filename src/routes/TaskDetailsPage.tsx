@@ -312,10 +312,10 @@ export default function TaskDetailsPage() {
                 {task.assignee_id ? (
                   <div>
                     <div className="text-sm font-semibold text-gray-900">
-                      {assignee?.full_name || 'موظف'}
+                      {assignee?.full_name || 'شريك'}
                     </div>
                     <div className="text-xs text-gray-500 capitalize">
-                      {assignee?.role === 'manager' ? 'مدير' : 'موظف'}
+                      {assignee?.role === 'manager' ? 'مدير' : 'شريك'}
                     </div>
                     <div className="text-xs text-gray-400 truncate">
                       ID: {assignee?.id?.slice(0, 20) || task.assignee_id.slice(0, 20)}...
@@ -343,7 +343,7 @@ export default function TaskDetailsPage() {
                     <option value="">غير محدد</option>
                     {employees.map(emp => (
                       <option key={emp.id} value={emp.id}>
-                        {emp.full_name || emp.id.slice(0, 8)} ({emp.role === 'manager' ? 'مدير' : 'موظف'})
+                        {emp.full_name || emp.id.slice(0, 8)} ({emp.role === 'manager' ? 'مدير' : 'شريك'})
                       </option>
                     ))}
                   </select>
@@ -351,7 +351,7 @@ export default function TaskDetailsPage() {
               </div>
             )}
             
-            {/* عرض المراجع للموظفين (للقراءة فقط) */}
+            {/* عرض المراجع للشركاء (للقراءة فقط) */}
             {profile?.role !== 'manager' && reviewerId && (
               <div className="flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-purple-50 mt-0.5">

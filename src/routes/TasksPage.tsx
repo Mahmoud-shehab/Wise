@@ -29,7 +29,7 @@ export default function TasksPage() {
   }, [isManager]);
 
   const filteredTasks = tasks.filter(task => {
-    // للموظفين: عرض مهامهم فقط
+    // للشركاء: عرض مهامهم فقط
     if (profile?.role === 'employee' && task.assignee_id !== user?.id) {
       return false;
     }

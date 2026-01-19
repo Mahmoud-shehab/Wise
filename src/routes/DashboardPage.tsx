@@ -61,7 +61,7 @@ export default function DashboardPage() {
           <div className="space-y-6" dir="rtl">
               <div className="card p-6">
                   <h1 className="text-2xl font-bold text-gray-900">
-                      مرحباً، {profile.full_name || 'موظف'}!
+                      مرحباً، {profile.full_name || 'شريك'}!
                   </h1>
                   <p className="mt-2 text-gray-600">
                       ابدأ من صفحة
