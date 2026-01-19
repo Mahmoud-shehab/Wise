@@ -22,6 +22,7 @@ export default function AllTasksPage() {
   const [companyId, setCompanyId] = useState<string | ''>('');
   const [taskTypeId, setTaskTypeId] = useState<string | ''>('');
   const [period, setPeriod] = useState('');
+  const [attachments, setAttachments] = useState<File[]>([]);
   
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -36,6 +37,29 @@ export default function AllTasksPage() {
   const [newTaskPriority, setNewTaskPriority] = useState<'low' | 'medium' | 'high'>('medium');
   const [newTaskStartDate, setNewTaskStartDate] = useState('');
   const [newTaskDueDate, setNewTaskDueDate] = useState('');
+  const [newTaskNotes, setNewTaskNotes] = useState('');
+  
+  // Period options
+  const periodOptions = [
+    'شهر يناير',
+    'شهر فبراير',
+    'شهر مارس',
+    'شهر ابريل',
+    'شهر مايو',
+    'شهر يونيو',
+    'شهر يوليو',
+    'شهر أغسطس',
+    'شهر سبتمبر',
+    'شهر أكتوبر',
+    'شهر نوفمبر',
+    'شهر ديسمبر',
+    'الربع الأول',
+    'الربع الثاني',
+    'الربع الثالث',
+    'الربع الرابع',
+    'سنوي',
+    'خانة كتابة'
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -150,11 +174,13 @@ export default function AllTasksPage() {
       setNewTaskPriority('medium');
       setNewTaskStartDate('');
       setNewTaskDueDate('');
+      setNewTaskNotes('');
       setAssigneeId('');
       setReviewerId('');
       setCompanyId('');
       setTaskTypeId('');
       setPeriod('');
+      setAttachments([]);
     } catch (error) {
       console.error(error);
     }
@@ -208,7 +234,7 @@ export default function AllTasksPage() {
                   className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
                   required
                 >
-                  <option value="">قائمة منسدلة</option>
+                  <option value=""></option>
                   {companies.map(company => (
                     <option key={company.id} value={company.id}>
                       {company.name}
@@ -227,7 +253,7 @@ export default function AllTasksPage() {
                   className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
                   required
                 >
-                  <option value="">قائمة منسدلة</option>
+                  <option value=""></option>
                   {taskTypes.map(type => (
                     <option key={type.id} value={type.id}>
                       {type.name}
@@ -240,32 +266,45 @@ export default function AllTasksPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   الفترة
                 </label>
-                <input
-                  type="text"
+                <select
                   value={period}
                   onChange={(e) => setPeriod(e.target.value)}
-                  placeholder="قائمة منسدلة"
-                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
-                />
+                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
+                >
+                  <option value=""></option>
+                  {periodOptions.map((p, idx) => (
+                    <option key={idx} value={p}>
+                      {p}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
             {/* Row 2: Task Description */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                وصف المهمة
+                وصف المهمة <span className="text-red-500">*</span>
               </label>
+              <input
+                type="text"
+                value={newTaskTitle}
+                onChange={e => setNewTaskTitle(e.target.value)}
+                placeholder="عنوان المهمة"
+                className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 mb-2"
+                required
+              />
               <textarea 
                 value={newTaskDescription}
                 onChange={e => setNewTaskDescription(e.target.value)}
-                placeholder="خانة كتابة"
-                rows={3}
+                placeholder="تفاصيل المهمة (اختياري)"
+                rows={2}
                 className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
               />
             </div>
 
-            {/* Row 3: Priority, Estimated Time, Assignee */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Row 3: Priority, Start Date, End Date, Assignee */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   الأولوية
@@ -275,7 +314,6 @@ export default function AllTasksPage() {
                   onChange={(e) => setNewTaskPriority(e.target.value as 'low' | 'medium' | 'high')}
                   className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
                 >
-                  <option value="">قائمة منسدلة</option>
                   <option value="low">منخفضة</option>
                   <option value="medium">متوسطة</option>
                   <option value="high">عالية</option>
@@ -284,13 +322,24 @@ export default function AllTasksPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  الوقت المقدر
+                  تاريخ البداية
+                </label>
+                <input
+                  type="date"
+                  value={newTaskStartDate}
+                  onChange={(e) => setNewTaskStartDate(e.target.value)}
+                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  تاريخ النهاية
                 </label>
                 <input
                   type="date"
                   value={newTaskDueDate}
                   onChange={(e) => setNewTaskDueDate(e.target.value)}
-                  placeholder="نتيجة تقويم"
                   className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
                 />
               </div>
@@ -305,7 +354,7 @@ export default function AllTasksPage() {
                     onChange={(e) => setAssigneeId(e.target.value)}
                     className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
                   >
-                    <option value="">قائمة منسدلة</option>
+                    <option value=""></option>
                     {employees.map(emp => (
                       <option key={emp.id} value={emp.id}>
                         {emp.full_name || emp.id.slice(0,8)}
@@ -328,7 +377,7 @@ export default function AllTasksPage() {
                     onChange={(e) => setReviewerId(e.target.value)}
                     className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
                   >
-                    <option value="">قائمة منسدلة</option>
+                    <option value=""></option>
                     {employees.map(emp => (
                       <option key={emp.id} value={emp.id}>
                         {emp.full_name || emp.id.slice(0,8)}
@@ -344,11 +393,10 @@ export default function AllTasksPage() {
                 </label>
                 <input
                   type="text"
-                  value={newTaskTitle}
-                  onChange={e => setNewTaskTitle(e.target.value)}
+                  value={newTaskNotes}
+                  onChange={e => setNewTaskNotes(e.target.value)}
                   placeholder="خانة كتابة"
                   className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
-                  required
                 />
               </div>
 
@@ -356,9 +404,21 @@ export default function AllTasksPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   مرفق
                 </label>
-                <div className="flex items-center justify-center w-full h-10 rounded-md border-2 border-dashed border-gray-300 hover:border-gray-400 cursor-pointer">
-                  <span className="text-sm text-gray-500">علامة الارفاق</span>
-                </div>
+                <input
+                  type="file"
+                  multiple
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setAttachments(Array.from(e.target.files));
+                    }
+                  }}
+                  className="w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+                {attachments.length > 0 && (
+                  <p className="mt-1 text-xs text-gray-500">
+                    {attachments.length} ملف محدد
+                  </p>
+                )}
               </div>
             </div>
 
