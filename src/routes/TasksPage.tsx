@@ -55,8 +55,7 @@ export default function TasksPage() {
   const stats = {
     done: tasks.filter(t => t.status === 'done').length,
     in_progress: tasks.filter(t => t.status === 'in_progress').length,
-    assigned: tasks.filter(t => t.status === 'assigned').length,
-    pending_review: tasks.filter(t => t.status === 'pending_review').length,
+    open: tasks.filter(t => t.status === 'open').length,
   };
 
   if (loading) return <div className="text-center text-gray-600">جاري التحميل...</div>;
@@ -101,33 +100,24 @@ export default function TasksPage() {
 
       {/* Stats Cards - Manager Only */}
       {isManager && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <div className="card p-3 sm:p-4 text-center">
             <div className="flex items-center justify-center mb-2">
-              <div className="p-2 rounded-lg bg-yellow-50">
-                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600" />
+              <div className="p-2 rounded-lg bg-blue-50">
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
               </div>
             </div>
-            <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.assigned}</div>
-            <div className="text-xs sm:text-sm text-gray-600">مستلمة</div>
+            <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.open}</div>
+            <div className="text-xs sm:text-sm text-gray-600">مفتوح</div>
           </div>
           <div className="card p-3 sm:p-4 text-center">
             <div className="flex items-center justify-center mb-2">
-              <div className="p-2 rounded-lg bg-purple-50">
-                <PlayCircle className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
+              <div className="p-2 rounded-lg bg-yellow-50">
+                <PlayCircle className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600" />
               </div>
             </div>
             <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.in_progress}</div>
             <div className="text-xs sm:text-sm text-gray-600">جاري العمل</div>
-          </div>
-          <div className="card p-3 sm:p-4 text-center">
-            <div className="flex items-center justify-center mb-2">
-              <div className="p-2 rounded-lg bg-blue-50">
-                <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-              </div>
-            </div>
-            <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.pending_review}</div>
-            <div className="text-xs sm:text-sm text-gray-600">جاري المراجعة</div>
           </div>
           <div className="card p-3 sm:p-4 text-center">
             <div className="flex items-center justify-center mb-2">
@@ -136,7 +126,7 @@ export default function TasksPage() {
               </div>
             </div>
             <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.done}</div>
-            <div className="text-xs sm:text-sm text-gray-600">مكتملة</div>
+            <div className="text-xs sm:text-sm text-gray-600">اكتملت</div>
           </div>
         </div>
       )}
