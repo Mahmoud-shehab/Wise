@@ -80,60 +80,44 @@ export default function TaskDetailsPage() {
     fetchEmployees();
   }, [id, navigate]);
 
-  const updatePriority = async (newPriority: 'low' | 'medium' | 'high') => {
+  const updatePriority = async (newPriority: 'low' | 'medium' | 'high' | 'critical') => {
     if (!task) return;
     const oldPriority = task.priority;
     
-    setTask({ ...task, priority: newPriority });
+    setTask({ ...task, priority: newPriority as any });
 
     const { error } = await supabase
       .from('tasks')
-      .update({ priority: newPriority })
+      .update({ priority: newPriority as any })
       .eq('id', task.id);
 
     if (error) {
       console.error('Error updating priority:', error);
-      setTask({ ...task, priority: oldPriority });
+      setTask({ ...task, priority: oldPriority as any });
     } else {
       await supabase.from('task_activity').insert({
         task_id: task.id,
         action: 'priority_change',
-        to_status: newPriority
+        to_status: newPriority as any
       });
     }
   };
 
-  const updateStatus = async (newStatus: 'backlog' | 'assigned' | 'in_progress' | 'pending_review' | 'done' | 'blocked') => {
+  const updateStatus = async (newStatus: 'open' | 'in_progress' | 'done') => {
     if (!task) return;
-    
-    // التحقق من الصلاحيات لحالة "جاري المراجعة"
-    if (newStatus === 'pending_review') {
-      const isManager = profile?.role === 'manager';
-      const isReviewer = user?.id === reviewerId;
-      
-      if (!isManager && !isReviewer) {
-        alert('فقط المدير أو المراجع المحدد يمكنه تغيير الحالة إلى "جاري المراجعة"');
-        return;
-      }
-      
-      if (!reviewerId) {
-        alert('يجب تعيين مراجع للمهمة أولاً');
-        return;
-      }
-    }
     
     const oldStatus = task.status;
     
-    setTask({ ...task, status: newStatus });
+    setTask({ ...task, status: newStatus as any });
 
     const { error } = await supabase
       .from('tasks')
-      .update({ status: newStatus })
+      .update({ status: newStatus as any })
       .eq('id', task.id);
 
     if (error) {
       console.error('Error updating status:', error);
-      setTask({ ...task, status: oldStatus });
+      setTask({ ...task, status: oldStatus as any });
     } else {
       await supabase.from('task_activity').insert({
         task_id: task.id,
@@ -268,17 +252,12 @@ export default function TaskDetailsPage() {
               </label>
               <select
                 value={task.status}
-                onChange={(e) => updateStatus(e.target.value as 'backlog' | 'assigned' | 'in_progress' | 'pending_review' | 'done' | 'blocked')}
+                onChange={(e) => updateStatus(e.target.value as 'open' | 'in_progress' | 'done')}
                 className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
               >
-                <option value="backlog">متأخرة</option>
-                <option value="assigned">مستلمة</option>
-                <option value="in_progress">جاري العمل</option>
-                {/* فقط المراجع أو المدير يمكنهم تغيير الحالة إلى جاري المراجعة */}
-                {(profile?.role === 'manager' || user?.id === reviewerId) && (
-                  <option value="pending_review">جاري المراجعة</option>
-                )}
-                <option value="done">مكتملة</option>
+                <option value="open">مفتوح | Open</option>
+                <option value="in_progress">جاري العمل | In progress</option>
+                <option value="done">اكتملت | Done</option>
               </select>
             </div>
 
@@ -288,12 +267,13 @@ export default function TaskDetailsPage() {
               </label>
               <select
                 value={task.priority}
-                onChange={(e) => updatePriority(e.target.value as 'low' | 'medium' | 'high')}
+                onChange={(e) => updatePriority(e.target.value as 'low' | 'medium' | 'high' | 'critical')}
                 className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
               >
-                <option value="low">منخفضة</option>
-                <option value="medium">متوسطة</option>
-                <option value="high">عالية</option>
+                <option value="low">منخفض | Low</option>
+                <option value="medium">متوسط | Medium</option>
+                <option value="high">عالي | High</option>
+                <option value="critical">حرج | Critical</option>
               </select>
             </div>
           </div>
