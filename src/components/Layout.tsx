@@ -54,7 +54,6 @@ export default function Layout() {
 
   const navigation = [
     { name: 'لوحة التحكم', href: '/dashboard', icon: LayoutDashboard, show: profile?.role === 'manager' },
-    { name: 'المشاريع', href: '/projects', icon: FolderKanban, show: profile?.role === 'manager' },
     { name: 'مهامي', href: '/tasks', icon: ClipboardList, show: true },
     { name: 'التقويم', href: '/calendar', icon: Calendar, show: true },
     { name: 'الرسائل', href: '/messages', icon: MessageSquare, show: true },
@@ -62,7 +61,7 @@ export default function Layout() {
     { name: 'جميع المهام', href: '/all-tasks', icon: CheckSquare, show: profile?.role === 'manager' },
     { name: 'أنواع المهام', href: '/task-types', icon: Layers, show: profile?.role === 'manager' },
     { name: 'الشركات', href: '/companies', icon: Building2, show: profile?.role === 'manager' },
-    { name: 'الموظفين', href: '/admin', icon: Users, show: profile?.role === 'manager' },
+    { name: 'الشركاء', href: '/admin', icon: Users, show: profile?.role === 'manager' },
     { name: 'التقارير', href: '/reports', icon: BarChart2, show: profile?.role === 'manager' },
   ];
 
@@ -128,7 +127,7 @@ export default function Layout() {
                 <div className="flex-1">
                   <div className="font-semibold truncate">{profile?.full_name || 'مدير النظام'}</div>
                   <div className="mt-1 inline-flex items-center rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset ring-white/20">
-                    {profile?.role === 'manager' ? 'مدير' : 'موظف'}
+                    {profile?.role === 'manager' ? 'مدير' : 'شريك'}
                   </div>
                 </div>
               </div>
