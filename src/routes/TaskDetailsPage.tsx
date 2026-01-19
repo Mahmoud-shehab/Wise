@@ -37,7 +37,7 @@ export default function TaskDetailsPage() {
         if (data.assignee_id) {
           const { data: emp } = await supabase
             .from('profiles')
-            .select('id, full_name, role, created_at')
+            .select('*')
             .eq('id', data.assignee_id)
             .single();
           setAssignee(emp || null);
@@ -56,7 +56,7 @@ export default function TaskDetailsPage() {
           setReviewerId(reviewerData.reviewer_id);
           const { data: rev } = await supabase
             .from('profiles')
-            .select('id, full_name, role, created_at')
+            .select('*')
             .eq('id', reviewerData.reviewer_id)
             .single();
           setReviewer(rev || null);
@@ -71,7 +71,7 @@ export default function TaskDetailsPage() {
     const fetchEmployees = async () => {
       const { data } = await supabase
         .from('profiles')
-        .select('id, full_name, role, created_at')
+        .select('*')
         .order('full_name', { ascending: true });
       setEmployees(data || []);
     };

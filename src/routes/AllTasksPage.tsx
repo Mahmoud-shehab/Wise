@@ -37,7 +37,7 @@ export default function AllTasksPage() {
       }
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, full_name, role, created_at')
+        .select('*')
         .order('full_name', { ascending: true });
       if (error) {
         console.error('Error fetching employees:', error);
