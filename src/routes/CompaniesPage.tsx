@@ -16,6 +16,22 @@ export default function CompaniesPage() {
   const [formName, setFormName] = useState('');
   const [formLegalName, setFormLegalName] = useState('');
   const [formSector, setFormSector] = useState('');
+  const [formAddress, setFormAddress] = useState('');
+  const [formPhone, setFormPhone] = useState('');
+  const [formContactPerson, setFormContactPerson] = useState('');
+  const [formMobile, setFormMobile] = useState('');
+  const [formEmails, setFormEmails] = useState('');
+  
+  // Tax portal data
+  const [taxRegistrationNumber, setTaxRegistrationNumber] = useState('');
+  const [taxFileNumber, setTaxFileNumber] = useState('');
+  const [taxOffice, setTaxOffice] = useState('');
+  const [registeredEmail, setRegisteredEmail] = useState('');
+  const [registeredPhone, setRegisteredPhone] = useState('');
+  const [taxUsername, setTaxUsername] = useState('');
+  const [taxPassword, setTaxPassword] = useState('');
+  const [otherTaxData, setOtherTaxData] = useState('');
+  
   const [formRequiredFields, setFormRequiredFields] = useState('');
   const [formNotes, setFormNotes] = useState('');
 
@@ -47,6 +63,17 @@ export default function CompaniesPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     
+    const taxPortalData = {
+      tax_registration_number: taxRegistrationNumber,
+      tax_file_number: taxFileNumber,
+      tax_office: taxOffice,
+      registered_email: registeredEmail,
+      registered_phone: registeredPhone,
+      username: taxUsername,
+      password: taxPassword,
+      other_data: otherTaxData,
+    };
+    
     if (editingCompany) {
       // Update existing company
       const { error } = await supabase
@@ -55,6 +82,12 @@ export default function CompaniesPage() {
           name: formName,
           legal_name: formLegalName,
           sector: formSector,
+          address: formAddress || null,
+          phone: formPhone || null,
+          contact_person: formContactPerson || null,
+          mobile: formMobile || null,
+          emails: formEmails || null,
+          tax_portal_data: taxPortalData,
           required_fields: formRequiredFields || null,
           notes: formNotes || null,
         })
@@ -75,6 +108,12 @@ export default function CompaniesPage() {
           name: formName,
           legal_name: formLegalName,
           sector: formSector,
+          address: formAddress || null,
+          phone: formPhone || null,
+          contact_person: formContactPerson || null,
+          mobile: formMobile || null,
+          emails: formEmails || null,
+          tax_portal_data: taxPortalData,
           required_fields: formRequiredFields || null,
           notes: formNotes || null,
         });
@@ -97,6 +136,25 @@ export default function CompaniesPage() {
     setFormName(company.name);
     setFormLegalName(company.legal_name);
     setFormSector(company.sector);
+    setFormAddress(company.address || '');
+    setFormPhone(company.phone || '');
+    setFormContactPerson(company.contact_person || '');
+    setFormMobile(company.mobile || '');
+    setFormEmails(company.emails || '');
+    
+    // Load tax portal data
+    const taxData = company.tax_portal_data as any;
+    if (taxData) {
+      setTaxRegistrationNumber(taxData.tax_registration_number || '');
+      setTaxFileNumber(taxData.tax_file_number || '');
+      setTaxOffice(taxData.tax_office || '');
+      setRegisteredEmail(taxData.registered_email || '');
+      setRegisteredPhone(taxData.registered_phone || '');
+      setTaxUsername(taxData.username || '');
+      setTaxPassword(taxData.password || '');
+      setOtherTaxData(taxData.other_data || '');
+    }
+    
     setFormRequiredFields(company.required_fields || '');
     setFormNotes(company.notes || '');
     setIsCreating(true);
@@ -123,6 +181,19 @@ export default function CompaniesPage() {
     setFormName('');
     setFormLegalName('');
     setFormSector('');
+    setFormAddress('');
+    setFormPhone('');
+    setFormContactPerson('');
+    setFormMobile('');
+    setFormEmails('');
+    setTaxRegistrationNumber('');
+    setTaxFileNumber('');
+    setTaxOffice('');
+    setRegisteredEmail('');
+    setRegisteredPhone('');
+    setTaxUsername('');
+    setTaxPassword('');
+    setOtherTaxData('');
     setFormRequiredFields('');
     setFormNotes('');
   };

@@ -43,6 +43,12 @@ export interface Database {
           name: string
           legal_name: string
           sector: string
+          address: string | null
+          phone: string | null
+          contact_person: string | null
+          mobile: string | null
+          emails: string | null
+          tax_portal_data: any | null
           required_fields: string | null
           notes: string | null
           created_at: string
@@ -53,6 +59,12 @@ export interface Database {
           name: string
           legal_name: string
           sector: string
+          address?: string | null
+          phone?: string | null
+          contact_person?: string | null
+          mobile?: string | null
+          emails?: string | null
+          tax_portal_data?: any | null
           required_fields?: string | null
           notes?: string | null
           created_at?: string
@@ -63,6 +75,12 @@ export interface Database {
           name?: string
           legal_name?: string
           sector?: string
+          address?: string | null
+          phone?: string | null
+          contact_person?: string | null
+          mobile?: string | null
+          emails?: string | null
+          tax_portal_data?: any | null
           required_fields?: string | null
           notes?: string | null
           created_at?: string
