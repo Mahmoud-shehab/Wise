@@ -38,7 +38,7 @@ export default function ListView({ projectId, sections, tasks, onRefresh }: List
         title: newTaskTitle,
         project_id: projectId,
         section_id: sectionId,
-        status: 'backlog',
+        status: 'open' as any,
         priority: 'medium',
         position: sectionId ? getTasksBySection(sectionId).length : getTasksWithoutSection().length,
       });

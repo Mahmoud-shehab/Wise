@@ -67,7 +67,7 @@ export default function ReportsPage() {
     total: filteredTasks.length,
     completed: filteredTasks.filter(t => t.status === 'done').length,
     inProgress: filteredTasks.filter(t => t.status === 'in_progress').length,
-    pending: filteredTasks.filter(t => t.status === 'assigned' || t.status === 'backlog').length,
+    pending: filteredTasks.filter(t => t.status === 'open').length,
     completionRate: filteredTasks.length > 0 
       ? Math.round((filteredTasks.filter(t => t.status === 'done').length / filteredTasks.length) * 100)
       : 0,

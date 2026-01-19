@@ -60,7 +60,7 @@ export function TaskCard({ task, onStatusChange, onAssignSelf, onDelete, showDel
               )}
               
               {/* Start Task */}
-              {isAssignee && task.status === 'assigned' && onStatusChange && (
+              {isAssignee && task.status === 'open' && onStatusChange && (
                 <button
                   onClick={() => onStatusChange(task.id, 'in_progress')}
                   className="rounded-md bg-blue-600 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold text-white hover:bg-blue-500 whitespace-nowrap"
@@ -72,7 +72,7 @@ export function TaskCard({ task, onStatusChange, onAssignSelf, onDelete, showDel
               {/* Complete Task - Send to Review */}
               {isAssignee && task.status === 'in_progress' && onStatusChange && (
                 <button
-                  onClick={() => onStatusChange(task.id, 'pending_review')}
+                  onClick={() => onStatusChange(task.id, 'done')}
                   className="rounded-md bg-purple-600 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold text-white hover:bg-purple-500 whitespace-nowrap"
                 >
                   إرسال للمراجعة

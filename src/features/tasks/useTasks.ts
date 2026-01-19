@@ -61,7 +61,6 @@ export function useTasks() {
 
     const updates: any = { status: newStatus };
     if (newStatus === 'in_progress') updates.started_at = new Date().toISOString();
-    if (newStatus === 'pending_review') updates.completed_at = new Date().toISOString();
     if (newStatus === 'done') {
       updates.completed_at = new Date().toISOString();
       updates.reviewed_at = new Date().toISOString();
@@ -86,7 +85,7 @@ export function useTasks() {
 
   const assignTask = async (taskId: string, assigneeId: string) => {
     if (!isSupabaseConfigured) {
-      setTasks(prev => prev.map(t => t.id === taskId ? { ...t, assignee_id: assigneeId, status: 'assigned' } : t));
+      setTasks(prev => prev.map(t => t.id === taskId ? { ...t, assignee_id: assigneeId, status: 'open' as any } : t));
       return;
     }
     const { error } = await supabase.from('tasks').update({ assignee_id: assigneeId, status: 'assigned' }).eq('id', taskId);
@@ -114,7 +113,7 @@ export function useTasks() {
     setTasks(prev => prev.map(t => t.id === taskId ? { ...t, priority: newPriority } : t));
 
     if (!isSupabaseConfigured) return;
-    const { error } = await supabase.from('tasks').update({ priority: newPriority }).eq('id', taskId);
+    const { error } = await supabase.from('tasks').update({ priority: newPriority as any }).eq('id', taskId);
 
     if (error) {
       console.error('Error updating priority:', error);

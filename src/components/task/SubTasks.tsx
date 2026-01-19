@@ -58,7 +58,7 @@ export default function SubTasks({ taskId, projectId }: SubTasksProps) {
         title: newTaskTitle,
         parent_task_id: taskId,
         project_id: projectId,
-        status: 'backlog',
+        status: 'open' as any,
         priority: 'medium',
         position: subTasks.length,
       });

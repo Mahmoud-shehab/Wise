@@ -124,9 +124,9 @@ export default function ReviewPage() {
     }
   };
 
-  const pendingTasks = tasks.filter(t => t.status === 'pending_review');
+  const pendingTasks = tasks.filter(t => t.status === 'in_progress');
   const approvedTasks = tasks.filter(t => t.status === 'done');
-  const otherTasks = tasks.filter(t => t.status !== 'pending_review' && t.status !== 'done');
+  const otherTasks = tasks.filter(t => t.status !== 'in_progress' && t.status !== 'done');
 
   if (loading) return <div className="text-center text-gray-600">جاري التحميل...</div>;
 

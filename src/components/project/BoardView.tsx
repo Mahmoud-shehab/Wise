@@ -36,7 +36,7 @@ export default function BoardView({ projectId, sections, tasks, onRefresh }: Boa
         title: newTaskTitle,
         project_id: projectId,
         section_id: sectionId,
-        status: 'backlog',
+        status: 'open' as any,
         priority: 'medium',
         position: getTasksBySection(sectionId).length,
       });
