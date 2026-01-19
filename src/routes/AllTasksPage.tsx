@@ -11,9 +11,17 @@ export default function AllTasksPage() {
   const { profile, user } = useAuth();
   const isManager = profile?.role === 'manager';
   type Profile = Database['public']['Tables']['profiles']['Row'];
+  type Company = Database['public']['Tables']['companies']['Row'];
+  type TaskType = Database['public']['Tables']['task_types']['Row'];
+  
   const [employees, setEmployees] = useState<Profile[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [taskTypes, setTaskTypes] = useState<TaskType[]>([]);
   const [assigneeId, setAssigneeId] = useState<string | ''>('');
   const [reviewerId, setReviewerId] = useState<string | ''>('');
+  const [companyId, setCompanyId] = useState<string | ''>('');
+  const [taskTypeId, setTaskTypeId] = useState<string | ''>('');
+  const [period, setPeriod] = useState('');
   
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -30,22 +38,49 @@ export default function AllTasksPage() {
   const [newTaskDueDate, setNewTaskDueDate] = useState('');
 
   useEffect(() => {
-    const fetchEmployees = async () => {
+    const fetchData = async () => {
       if (!isSupabaseConfigured) {
         setEmployees([]);
+        setCompanies([]);
+        setTaskTypes([]);
         return;
       }
-      const { data, error } = await supabase
+      
+      // Fetch employees
+      const { data: employeesData, error: employeesError } = await supabase
         .from('profiles')
         .select('*')
         .order('full_name', { ascending: true });
-      if (error) {
-        console.error('Error fetching employees:', error);
+      if (employeesError) {
+        console.error('Error fetching employees:', employeesError);
       } else {
-        setEmployees(data || []);
+        setEmployees(employeesData || []);
+      }
+      
+      // Fetch companies
+      const { data: companiesData, error: companiesError } = await supabase
+        .from('companies')
+        .select('*')
+        .order('name', { ascending: true });
+      if (companiesError) {
+        console.error('Error fetching companies:', companiesError);
+      } else {
+        setCompanies(companiesData || []);
+      }
+      
+      // Fetch task types (only parent types for now)
+      const { data: taskTypesData, error: taskTypesError } = await supabase
+        .from('task_types')
+        .select('*')
+        .is('parent_id', null)
+        .order('name', { ascending: true });
+      if (taskTypesError) {
+        console.error('Error fetching task types:', taskTypesError);
+      } else {
+        setTaskTypes(taskTypesData || []);
       }
     };
-    fetchEmployees();
+    fetchData();
   }, []);
 
   const filteredTasks = tasks.filter(task => {
@@ -85,6 +120,8 @@ export default function AllTasksPage() {
         status: assigneeId ? 'assigned' : 'backlog',
         priority: newTaskPriority,
         assignee_id: assigneeId || null,
+        company_id: companyId || null,
+        task_type_id: taskTypeId || null,
         start_date: newTaskStartDate || null,
         due_date: newTaskDueDate || null
       });
@@ -115,6 +152,9 @@ export default function AllTasksPage() {
       setNewTaskDueDate('');
       setAssigneeId('');
       setReviewerId('');
+      setCompanyId('');
+      setTaskTypeId('');
+      setPeriod('');
     } catch (error) {
       console.error(error);
     }
@@ -154,75 +194,118 @@ export default function AllTasksPage() {
       {/* Create Task Modal */}
       {isCreating && (
         <div className="card p-4 sm:p-6">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">مهمة جديدة</h2>
-          <form onSubmit={handleCreate} className="space-y-3 sm:space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">عنوان المهمة</label>
-              <input 
-                type="text" 
-                value={newTaskTitle}
-                onChange={e => setNewTaskTitle(e.target.value)}
-                placeholder="أدخل عنوان المهمة..."
-                className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
-                required
-              />
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">إضافة مهمة</h2>
+          <form onSubmit={handleCreate} className="space-y-4">
+            {/* Row 1: Company, Task Type, Period */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  اختر الشركة <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={companyId}
+                  onChange={(e) => setCompanyId(e.target.value)}
+                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
+                  required
+                >
+                  <option value="">قائمة منسدلة</option>
+                  {companies.map(company => (
+                    <option key={company.id} value={company.id}>
+                      {company.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  نوع المهمة <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={taskTypeId}
+                  onChange={(e) => setTaskTypeId(e.target.value)}
+                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
+                  required
+                >
+                  <option value="">قائمة منسدلة</option>
+                  {taskTypes.map(type => (
+                    <option key={type.id} value={type.id}>
+                      {type.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  الفترة
+                </label>
+                <input
+                  type="text"
+                  value={period}
+                  onChange={(e) => setPeriod(e.target.value)}
+                  placeholder="قائمة منسدلة"
+                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                />
+              </div>
             </div>
-            
+
+            {/* Row 2: Task Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">الوصف</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                وصف المهمة
+              </label>
               <textarea 
                 value={newTaskDescription}
                 onChange={e => setNewTaskDescription(e.target.value)}
-                placeholder="أدخل وصف المهمة..."
+                placeholder="خانة كتابة"
                 rows={3}
                 className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            {/* Row 3: Priority, Estimated Time, Assignee */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">تاريخ البدء</label>
-                <input
-                  type="date"
-                  value={newTaskStartDate}
-                  onChange={(e) => setNewTaskStartDate(e.target.value)}
-                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
-                />
-              </div>
-              <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">تاريخ الانتهاء</label>
-                <input
-                  type="date"
-                  value={newTaskDueDate}
-                  onChange={(e) => setNewTaskDueDate(e.target.value)}
-                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">الأولوية</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  الأولوية
+                </label>
                 <select
                   value={newTaskPriority}
                   onChange={(e) => setNewTaskPriority(e.target.value as 'low' | 'medium' | 'high')}
                   className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
                 >
+                  <option value="">قائمة منسدلة</option>
                   <option value="low">منخفضة</option>
                   <option value="medium">متوسطة</option>
                   <option value="high">عالية</option>
                 </select>
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  الوقت المقدر
+                </label>
+                <input
+                  type="date"
+                  value={newTaskDueDate}
+                  onChange={(e) => setNewTaskDueDate(e.target.value)}
+                  placeholder="نتيجة تقويم"
+                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                />
+              </div>
+
               {isManager && (
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">تعيين إلى</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    القائم بالتنفيذ
+                  </label>
                   <select
                     value={assigneeId}
                     onChange={(e) => setAssigneeId(e.target.value)}
                     className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
                   >
-                    <option value="">غير مسندة</option>
+                    <option value="">قائمة منسدلة</option>
                     {employees.map(emp => (
                       <option key={emp.id} value={emp.id}>
                         {emp.full_name || emp.id.slice(0,8)}
@@ -233,25 +316,53 @@ export default function AllTasksPage() {
               )}
             </div>
 
-            {isManager && (
-              <div>
-                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">إسناد المراجعة إلى</label>
-                <select
-                  value={reviewerId}
-                  onChange={(e) => setReviewerId(e.target.value)}
-                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
-                >
-                  <option value="">لا يوجد مراجع</option>
-                  {employees.map(emp => (
-                    <option key={emp.id} value={emp.id}>
-                      {emp.full_name || emp.id.slice(0,8)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
+            {/* Row 4: Reviewer, Notes, Attachments */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {isManager && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    القائم بالمراجعة
+                  </label>
+                  <select
+                    value={reviewerId}
+                    onChange={(e) => setReviewerId(e.target.value)}
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
+                  >
+                    <option value="">قائمة منسدلة</option>
+                    {employees.map(emp => (
+                      <option key={emp.id} value={emp.id}>
+                        {emp.full_name || emp.id.slice(0,8)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
-            <div className="flex flex-col-reverse sm:flex-row gap-2 justify-end">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ملاحظات
+                </label>
+                <input
+                  type="text"
+                  value={newTaskTitle}
+                  onChange={e => setNewTaskTitle(e.target.value)}
+                  placeholder="خانة كتابة"
+                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  مرفق
+                </label>
+                <div className="flex items-center justify-center w-full h-10 rounded-md border-2 border-dashed border-gray-300 hover:border-gray-400 cursor-pointer">
+                  <span className="text-sm text-gray-500">علامة الارفاق</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col-reverse sm:flex-row gap-2 justify-end pt-2 border-t">
               <button type="button" onClick={() => setIsCreating(false)} className="btn-secondary text-sm sm:text-base">
                 إلغاء
               </button>

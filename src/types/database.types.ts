@@ -118,6 +118,7 @@ export interface Database {
           name: string
           description: string | null
           color: string
+          parent_id: string | null
           created_at: string
           updated_at: string
         }
@@ -126,6 +127,7 @@ export interface Database {
           name: string
           description?: string | null
           color?: string
+          parent_id?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -134,10 +136,18 @@ export interface Database {
           name?: string
           description?: string | null
           color?: string
+          parent_id?: string | null
           created_at?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "task_types_parent_id_fkey"
+            columns: ["parent_id"]
+            referencedRelation: "task_types"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       tasks: {
         Row: {
