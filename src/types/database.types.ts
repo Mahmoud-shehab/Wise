@@ -14,18 +14,42 @@ export interface Database {
           id: string
           full_name: string | null
           role: 'manager' | 'employee' | 'assistant_manager'
+          job_title: string | null
+          national_id: string | null
+          hire_date: string | null
+          social_insurance_date: string | null
+          insurance_number: string | null
+          personal_email: string | null
+          personal_phone: string | null
+          work_phone: string | null
           created_at: string
         }
         Insert: {
           id: string
           full_name?: string | null
           role?: 'manager' | 'employee' | 'assistant_manager'
+          job_title?: string | null
+          national_id?: string | null
+          hire_date?: string | null
+          social_insurance_date?: string | null
+          insurance_number?: string | null
+          personal_email?: string | null
+          personal_phone?: string | null
+          work_phone?: string | null
           created_at?: string
         }
         Update: {
           id?: string
           full_name?: string | null
           role?: 'manager' | 'employee' | 'assistant_manager'
+          job_title?: string | null
+          national_id?: string | null
+          hire_date?: string | null
+          social_insurance_date?: string | null
+          insurance_number?: string | null
+          personal_email?: string | null
+          personal_phone?: string | null
+          work_phone?: string | null
           created_at?: string
         }
         Relationships: [

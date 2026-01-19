@@ -18,6 +18,16 @@ export default function AdminPage() {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<'employee' | 'manager' | 'assistant_manager'>('employee');
   
+  // New partner fields
+  const [jobTitle, setJobTitle] = useState('');
+  const [nationalId, setNationalId] = useState('');
+  const [hireDate, setHireDate] = useState('');
+  const [socialInsuranceDate, setSocialInsuranceDate] = useState('');
+  const [insuranceNumber, setInsuranceNumber] = useState('');
+  const [personalEmail, setPersonalEmail] = useState('');
+  const [personalPhone, setPersonalPhone] = useState('');
+  const [workPhone, setWorkPhone] = useState('');
+  
   const [creating, setCreating] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -45,7 +55,18 @@ export default function AdminPage() {
         // Update existing employee
         const { error } = await supabase
           .from('profiles')
-          .update({ full_name: fullName, role })
+          .update({ 
+            full_name: fullName, 
+            role,
+            job_title: jobTitle || null,
+            national_id: nationalId || null,
+            hire_date: hireDate || null,
+            social_insurance_date: socialInsuranceDate || null,
+            insurance_number: insuranceNumber || null,
+            personal_email: personalEmail || null,
+            personal_phone: personalPhone || null,
+            work_phone: workPhone || null,
+          })
           .eq('id', editingEmployee.id);
         
         if (error) {
@@ -116,7 +137,18 @@ export default function AdminPage() {
           
           const { error: updateErr } = await supabase
             .from('profiles')
-            .update({ full_name: fullName, role })
+            .update({ 
+              full_name: fullName, 
+              role,
+              job_title: jobTitle || null,
+              national_id: nationalId || null,
+              hire_date: hireDate || null,
+              social_insurance_date: socialInsuranceDate || null,
+              insurance_number: insuranceNumber || null,
+              personal_email: personalEmail || null,
+              personal_phone: personalPhone || null,
+              work_phone: workPhone || null,
+            })
             .eq('id', data.user.id);
           
           if (updateErr) {
@@ -159,7 +191,15 @@ export default function AdminPage() {
     setEditingEmployee(employee);
     setFullName(employee.full_name || '');
     setUsername(employee.id.slice(0, 8));
-    setRole(employee.role as 'employee' | 'manager');
+    setRole(employee.role as 'employee' | 'manager' | 'assistant_manager');
+    setJobTitle(employee.job_title || '');
+    setNationalId(employee.national_id || '');
+    setHireDate(employee.hire_date || '');
+    setSocialInsuranceDate(employee.social_insurance_date || '');
+    setInsuranceNumber(employee.insurance_number || '');
+    setPersonalEmail(employee.personal_email || '');
+    setPersonalPhone(employee.personal_phone || '');
+    setWorkPhone(employee.work_phone || '');
     setIsCreating(true);
   };
 
@@ -207,6 +247,14 @@ export default function AdminPage() {
     setUsername('');
     setPassword('');
     setRole('employee');
+    setJobTitle('');
+    setNationalId('');
+    setHireDate('');
+    setSocialInsuranceDate('');
+    setInsuranceNumber('');
+    setPersonalEmail('');
+    setPersonalPhone('');
+    setWorkPhone('');
   };
 
   const handleCancel = () => {
@@ -322,6 +370,114 @@ export default function AdminPage() {
                   <option value="assistant_manager">مساعد المدير</option>
                   <option value="manager">مدير</option>
                 </select>
+              </div>
+            </div>
+
+            {/* Additional Partner Information */}
+            <div className="border-t pt-4 mt-4">
+              <h3 className="text-md font-semibold text-gray-800 mb-3">معلومات إضافية</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    المسمى الوظيفي
+                  </label>
+                  <input
+                    type="text"
+                    value={jobTitle}
+                    onChange={(e) => setJobTitle(e.target.value)}
+                    placeholder="مثال: محاسب، مدير مبيعات..."
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    الرقم القومي
+                  </label>
+                  <input
+                    type="text"
+                    value={nationalId}
+                    onChange={(e) => setNationalId(e.target.value)}
+                    placeholder="مثال: 29501011234567"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    تاريخ التعيين
+                  </label>
+                  <input
+                    type="date"
+                    value={hireDate}
+                    onChange={(e) => setHireDate(e.target.value)}
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    تاريخ التأمين الاجتماعي
+                  </label>
+                  <input
+                    type="date"
+                    value={socialInsuranceDate}
+                    onChange={(e) => setSocialInsuranceDate(e.target.value)}
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    الرقم التأميني
+                  </label>
+                  <input
+                    type="text"
+                    value={insuranceNumber}
+                    onChange={(e) => setInsuranceNumber(e.target.value)}
+                    placeholder="مثال: 123456789"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    البريد الإلكتروني الشخصي
+                  </label>
+                  <input
+                    type="email"
+                    value={personalEmail}
+                    onChange={(e) => setPersonalEmail(e.target.value)}
+                    placeholder="مثال: ahmed@gmail.com"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    رقم التليفون الشخصي
+                  </label>
+                  <input
+                    type="tel"
+                    value={personalPhone}
+                    onChange={(e) => setPersonalPhone(e.target.value)}
+                    placeholder="مثال: 01012345678"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    رقم تليفون العمل
+                  </label>
+                  <input
+                    type="tel"
+                    value={workPhone}
+                    onChange={(e) => setWorkPhone(e.target.value)}
+                    placeholder="مثال: 0223456789"
+                    className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
+                  />
+                </div>
               </div>
             </div>
 
