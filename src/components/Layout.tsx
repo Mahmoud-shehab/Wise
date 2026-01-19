@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/features/auth/AuthContext';
-import { LayoutDashboard, CheckSquare, Users, LogOut, Menu, X, ClipboardList, Layers, Building2, BarChart2, FolderKanban, Eye, Calendar, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, Users, LogOut, Menu, X, ClipboardList, Layers, Building2, BarChart2, Eye, Calendar, MessageSquare } from 'lucide-react';
 import NotificationDropdown from '@/components/NotificationDropdown';
 import { supabase } from '@/lib/supabaseClient';
 import clsx from 'clsx';
