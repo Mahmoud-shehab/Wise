@@ -154,8 +154,8 @@ export interface Database {
           id: string
           title: string
           description: string | null
-          priority: 'low' | 'medium' | 'high'
-          status: 'backlog' | 'assigned' | 'in_progress' | 'pending_review' | 'done' | 'blocked'
+          priority: 'low' | 'medium' | 'high' | 'critical'
+          status: 'open' | 'in_progress' | 'done'
           assignee_id: string | null
           reviewer_id: string | null
           created_by: string | null
@@ -179,8 +179,8 @@ export interface Database {
           id?: string
           title: string
           description?: string | null
-          priority?: 'low' | 'medium' | 'high'
-          status?: 'backlog' | 'assigned' | 'in_progress' | 'pending_review' | 'done' | 'blocked'
+          priority?: 'low' | 'medium' | 'high' | 'critical'
+          status?: 'open' | 'in_progress' | 'done'
           assignee_id?: string | null
           reviewer_id?: string | null
           created_by?: string | null

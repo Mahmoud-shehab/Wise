@@ -35,7 +35,7 @@ export default function AllTasksPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
-  const [newTaskPriority, setNewTaskPriority] = useState<'low' | 'medium' | 'high'>('medium');
+  const [newTaskPriority, setNewTaskPriority] = useState<'low' | 'medium' | 'high' | 'critical'>('medium');
   const [newTaskStartDate, setNewTaskStartDate] = useState('');
   const [newTaskDueDate, setNewTaskDueDate] = useState('');
   const [newTaskNotes, setNewTaskNotes] = useState('');
@@ -141,7 +141,7 @@ export default function AllTasksPage() {
         title: newTaskTitle,
         description: newTaskDescription || null,
         created_by: user?.id ?? null,
-        status: assigneeId ? 'assigned' : 'backlog',
+        status: assigneeId ? 'open' : 'open',
         priority: newTaskPriority,
         assignee_id: assigneeId || null,
         company_id: companyId || null,
@@ -329,12 +329,13 @@ export default function AllTasksPage() {
                 </label>
                 <select
                   value={newTaskPriority}
-                  onChange={(e) => setNewTaskPriority(e.target.value as 'low' | 'medium' | 'high')}
+                  onChange={(e) => setNewTaskPriority(e.target.value as 'low' | 'medium' | 'high' | 'critical')}
                   className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
                 >
-                  <option value="low">منخفضة</option>
-                  <option value="medium">متوسطة</option>
-                  <option value="high">عالية</option>
+                  <option value="low">منخفض | Low</option>
+                  <option value="medium">متوسط | Medium</option>
+                  <option value="high">عالي | High</option>
+                  <option value="critical">حرج | Critical</option>
                 </select>
               </div>
 
@@ -479,10 +480,9 @@ export default function AllTasksPage() {
               className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
             >
               <option value="all">الكل</option>
-              <option value="backlog">متأخرة</option>
-              <option value="assigned">مستلمة</option>
-              <option value="in_progress">جاري العمل</option>
-              <option value="done">مكتملة</option>
+              <option value="open">مفتوح | Open</option>
+              <option value="in_progress">جاري العمل | In progress</option>
+              <option value="done">اكتملت | Done</option>
             </select>
           </div>
 
@@ -495,10 +495,10 @@ export default function AllTasksPage() {
               className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3 bg-white"
             >
               <option value="all">الكل</option>
-              <option value="low">منخفضة</option>
-              <option value="medium">متوسطة</option>
-              <option value="high">عالية</option>
-              <option value="urgent">عاجلة</option>
+              <option value="low">منخفض | Low</option>
+              <option value="medium">متوسط | Medium</option>
+              <option value="high">عالي | High</option>
+              <option value="critical">حرج | Critical</option>
             </select>
           </div>
 
