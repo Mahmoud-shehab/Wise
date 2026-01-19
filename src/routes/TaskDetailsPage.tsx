@@ -17,7 +17,7 @@ type Profile = Database['public']['Tables']['profiles']['Row'];
 export default function TaskDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
   const [task, setTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
   const [assignee, setAssignee] = useState<Profile | null>(null);
