@@ -36,8 +36,7 @@ export default function AllTasksPage() {
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
   const [newTaskPriority, setNewTaskPriority] = useState<'low' | 'medium' | 'high' | 'critical'>('medium');
-  const [newTaskStartDate, setNewTaskStartDate] = useState('');
-  const [newTaskDueDate, setNewTaskDueDate] = useState('');
+  const [newTaskEstimatedEndDate, setNewTaskEstimatedEndDate] = useState('');
   const [newTaskNotes, setNewTaskNotes] = useState('');
   
   // Period options
@@ -146,8 +145,8 @@ export default function AllTasksPage() {
         assignee_id: assigneeId || null,
         company_id: companyId || null,
         task_type_id: taskTypeId || null,
-        start_date: newTaskStartDate || null,
-        due_date: newTaskDueDate || null
+        estimated_end_date: newTaskEstimatedEndDate || null,
+        due_date: newTaskEstimatedEndDate || null
       });
       
       // إضافة المراجع إلى جدول task_reviewers إذا تم تحديده
@@ -172,8 +171,7 @@ export default function AllTasksPage() {
       setNewTaskTitle('');
       setNewTaskDescription('');
       setNewTaskPriority('medium');
-      setNewTaskStartDate('');
-      setNewTaskDueDate('');
+      setNewTaskEstimatedEndDate('');
       setNewTaskNotes('');
       setAssigneeId('');
       setReviewerId('');
@@ -321,8 +319,8 @@ export default function AllTasksPage() {
               />
             </div>
 
-            {/* Row 3: Priority, Start Date, End Date, Assignee */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Row 3: Priority, Estimated End Date, Assignee */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   الأولوية
@@ -341,24 +339,12 @@ export default function AllTasksPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  تاريخ البداية
+                  تاريخ مقدر للانتهاء
                 </label>
                 <input
                   type="date"
-                  value={newTaskStartDate}
-                  onChange={(e) => setNewTaskStartDate(e.target.value)}
-                  className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  تاريخ النهاية
-                </label>
-                <input
-                  type="date"
-                  value={newTaskDueDate}
-                  onChange={(e) => setNewTaskDueDate(e.target.value)}
+                  value={newTaskEstimatedEndDate}
+                  onChange={(e) => setNewTaskEstimatedEndDate(e.target.value)}
                   className="w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm px-3"
                 />
               </div>

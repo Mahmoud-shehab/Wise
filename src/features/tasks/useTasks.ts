@@ -88,7 +88,7 @@ export function useTasks() {
       setTasks(prev => prev.map(t => t.id === taskId ? { ...t, assignee_id: assigneeId, status: 'open' as any } : t));
       return;
     }
-    const { error } = await supabase.from('tasks').update({ assignee_id: assigneeId, status: 'assigned' }).eq('id', taskId);
+    const { error } = await supabase.from('tasks').update({ assignee_id: assigneeId, status: 'open' }).eq('id', taskId);
       
     if (error) console.error('Error assigning task:', error);
     else {

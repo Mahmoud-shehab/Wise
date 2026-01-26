@@ -167,7 +167,9 @@ export interface Database {
           estimated_hours: number | null
           actual_hours: number | null
           position: number
-          start_date: string | null
+          estimated_end_date: string | null
+          actual_start_date: string | null
+          actual_end_date: string | null
           due_date: string | null
           started_at: string | null
           completed_at: string | null
@@ -192,7 +194,9 @@ export interface Database {
           estimated_hours?: number | null
           actual_hours?: number | null
           position?: number
-          start_date?: string | null
+          estimated_end_date?: string | null
+          actual_start_date?: string | null
+          actual_end_date?: string | null
           due_date?: string | null
           started_at?: string | null
           completed_at?: string | null
@@ -204,8 +208,8 @@ export interface Database {
           id?: string
           title?: string
           description?: string | null
-          priority?: 'low' | 'medium' | 'high'
-          status?: 'backlog' | 'assigned' | 'in_progress' | 'pending_review' | 'done' | 'blocked'
+          priority?: 'low' | 'medium' | 'high' | 'critical'
+          status?: 'open' | 'in_progress' | 'done'
           assignee_id?: string | null
           reviewer_id?: string | null
           created_by?: string | null
@@ -217,7 +221,9 @@ export interface Database {
           estimated_hours?: number | null
           actual_hours?: number | null
           position?: number
-          start_date?: string | null
+          estimated_end_date?: string | null
+          actual_start_date?: string | null
+          actual_end_date?: string | null
           due_date?: string | null
           started_at?: string | null
           completed_at?: string | null

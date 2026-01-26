@@ -58,10 +58,10 @@ export default function CalendarPage() {
   const getTasksForDate = (date: Date) => {
     return filteredTasks.filter(task => {
       const taskDueDate = task.due_date ? new Date(task.due_date) : null;
-      const taskStartDate = task.start_date ? new Date(task.start_date) : null;
+      const taskEstimatedEndDate = task.estimated_end_date ? new Date(task.estimated_end_date) : null;
       
       return (taskDueDate && isSameDay(taskDueDate, date)) || 
-             (taskStartDate && isSameDay(taskStartDate, date));
+             (taskEstimatedEndDate && isSameDay(taskEstimatedEndDate, date));
     });
   };
 
@@ -176,9 +176,9 @@ export default function CalendarPage() {
                           📅 موعد الانتهاء
                         </div>
                       )}
-                      {task.start_date && isSameDay(new Date(task.start_date), day) && !task.due_date && (
+                      {task.estimated_end_date && isSameDay(new Date(task.estimated_end_date), day) && !task.due_date && (
                         <div className="text-xs text-gray-600 mt-0.5">
-                          🚀 تاريخ البدء
+                          🚀 تاريخ مقدر
                         </div>
                       )}
                     </Link>

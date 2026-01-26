@@ -75,11 +75,11 @@ export default function SubTasks({ taskId, projectId }: SubTasksProps) {
   };
 
   const handleToggleStatus = async (subTask: Task) => {
-    const newStatus = subTask.status === 'done' ? 'backlog' : 'done';
+    const newStatus = subTask.status === 'done' ? 'open' : 'done';
     
     const { error } = await supabase
       .from('tasks')
-      .update({ status: newStatus })
+      .update({ status: newStatus as any })
       .eq('id', subTask.id);
 
     if (error) {

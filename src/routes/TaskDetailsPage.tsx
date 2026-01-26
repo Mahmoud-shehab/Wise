@@ -352,14 +352,99 @@ export default function TaskDetailsPage() {
                 <Calendar className="h-4 w-4 text-purple-600" />
               </div>
               <div className="flex-1">
-                <div className="text-xs text-gray-500 mb-1">تاريخ الاستحقاق</div>
+                <div className="text-xs text-gray-500 mb-1">تاريخ مقدر للانتهاء</div>
                 <div className="text-sm font-medium text-gray-900">
-                  {task.due_date
+                  {task.estimated_end_date
+                    ? format(new Date(task.estimated_end_date), 'dd MMMM yyyy', { locale: ar })
+                    : task.due_date
                     ? format(new Date(task.due_date), 'dd MMMM yyyy', { locale: ar })
                     : 'غير محدد'}
                 </div>
               </div>
             </div>
+
+            {/* Actual Start Date - للشريك فقط */}
+            {task.assignee_id === profile?.id && (
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-green-50 mt-0.5">
+                  <Calendar className="h-4 w-4 text-green-600" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-xs text-gray-500 mb-1">تاريخ البداية الفعلي</div>
+                  <input
+                    type="date"
+                    value={task.actual_start_date ? new Date(task.actual_start_date).toISOString().split('T')[0] : ''}
+                    onChange={async (e) => {
+                      const newDate = e.target.value || null;
+                      const { error } = await supabase
+                        .from('tasks')
+                        .update({ actual_start_date: newDate })
+                        .eq('id', task.id);
+                      if (!error) {
+                        setTask({ ...task, actual_start_date: newDate });
+                      }
+                    }}
+                    className="w-full rounded-md border-0 py-1.5 text-sm text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 px-2"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Actual End Date - للشريك فقط */}
+            {task.assignee_id === profile?.id && (
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-red-50 mt-0.5">
+                  <Calendar className="h-4 w-4 text-red-600" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-xs text-gray-500 mb-1">تاريخ النهاية الفعلي</div>
+                  <input
+                    type="date"
+                    value={task.actual_end_date ? new Date(task.actual_end_date).toISOString().split('T')[0] : ''}
+                    onChange={async (e) => {
+                      const newDate = e.target.value || null;
+                      const { error } = await supabase
+                        .from('tasks')
+                        .update({ actual_end_date: newDate })
+                        .eq('id', task.id);
+                      if (!error) {
+                        setTask({ ...task, actual_end_date: newDate });
+                      }
+                    }}
+                    className="w-full rounded-md border-0 py-1.5 text-sm text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 px-2"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* عرض التواريخ الفعلية للمدير (للقراءة فقط) */}
+            {profile?.role === 'manager' && task.actual_start_date && (
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-green-50 mt-0.5">
+                  <Calendar className="h-4 w-4 text-green-600" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-xs text-gray-500 mb-1">تاريخ البداية الفعلي</div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {format(new Date(task.actual_start_date), 'dd MMMM yyyy', { locale: ar })}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {profile?.role === 'manager' && task.actual_end_date && (
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-red-50 mt-0.5">
+                  <Calendar className="h-4 w-4 text-red-600" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-xs text-gray-500 mb-1">تاريخ النهاية الفعلي</div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {format(new Date(task.actual_end_date), 'dd MMMM yyyy', { locale: ar })}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Created Date */}
             {task.created_at && (
