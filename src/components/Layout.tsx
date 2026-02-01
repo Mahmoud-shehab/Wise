@@ -68,18 +68,22 @@ export default function Layout() {
   return (
     <div className="min-h-screen bg-gray-100 flex" dir="rtl">
       {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center bg-white/90 backdrop-blur-sm p-3 border-b border-gray-200 shadow-sm" dir="ltr">
-        <NotificationDropdown />
-        <span className="font-bold text-lg text-[#114fd1] flex-1 text-center">Wise Tasks</span>
-        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-md hover:bg-gray-100">
-          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between bg-white/95 backdrop-blur-sm px-4 py-3 border-b border-gray-200 shadow-sm">
+        <button 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+          className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+          aria-label="القائمة"
+        >
+          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
+        <span className="font-bold text-lg text-[#114fd1]">Wise Tasks</span>
+        <NotificationDropdown />
       </div>
 
       {/* Sidebar */}
       <div className={clsx(
-        "fixed inset-y-0 right-0 z-50 w-72 bg-[#163d67] text-white shadow-xl transform transition-transform duration-200 ease-in-out lg:relative lg:translate-x-0 lg:flex lg:flex-col",
-        mobileMenuOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"
+        "fixed inset-y-0 right-0 z-50 w-72 bg-[#163d67] text-white shadow-xl transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:flex lg:flex-col",
+        mobileMenuOpen ? "translate-x-0" : "translate-x-full"
       )}>
         <div className="flex h-20 shrink-0 items-center px-6 border-b border-white/10">
           <div className="flex items-center justify-between w-full">
@@ -144,7 +148,7 @@ export default function Layout() {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 min-h-screen lg:pt-0 pt-16">
+      <div className="flex-1 min-h-screen pt-16 lg:pt-0">
         <main className="h-full p-3 sm:p-4 md:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto h-full">
             <Outlet />

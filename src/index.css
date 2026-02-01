@@ -43,11 +43,32 @@ html, body {
 }
 
 /* Mobile-specific improvements */
+@media (max-width: 1024px) {
+  /* Hide sidebar by default on mobile/tablet */
+  .sidebar-mobile-hidden {
+    transform: translateX(100%);
+  }
+  
+  /* Improve spacing on mobile */
+  .mobile-compact {
+    padding: 0.75rem !important;
+  }
+  
+  /* Stack elements vertically on mobile */
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+  
+  /* Full width on mobile */
+  .mobile-full {
+    width: 100% !important;
+  }
+}
+
 @media (max-width: 640px) {
   /* Improve touch targets */
-  button, a {
+  button, a, .clickable {
     min-height: 44px;
-    min-width: 44px;
   }
   
   /* Better text readability on mobile */
@@ -59,5 +80,51 @@ html, body {
   /* Prevent zoom on input focus */
   input, select, textarea {
     font-size: 16px !important;
+  }
+  
+  /* Reduce padding on cards for mobile */
+  .card {
+    @apply p-3 sm:p-4 md:p-6;
+  }
+  
+  /* Better table display on mobile */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Hide desktop-only elements */
+  .desktop-only {
+    display: none !important;
+  }
+  
+  /* Show mobile-only elements */
+  .mobile-only {
+    display: block !important;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 641px) {
+  .mobile-only {
+    display: none !important;
+  }
+  
+  .desktop-only {
+    display: block !important;
+  }
+}
+
+/* Improve scrolling on mobile */
+@media (max-width: 640px) {
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Fix viewport height on mobile browsers */
+  .min-h-screen {
+    min-height: -webkit-fill-available;
   }
 }
