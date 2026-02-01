@@ -80,9 +80,10 @@ export default function Layout() {
         <NotificationDropdown />
       </div>
 
-      {/* Sidebar */}
-      <div className={clsx(
-        "fixed inset-y-0 right-0 z-50 w-72 bg-[#163d67] text-white shadow-xl transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:flex lg:flex-col",
+      {/* Sidebar - Hidden on mobile by default */}
+      <aside className={clsx(
+        "fixed inset-y-0 right-0 z-50 w-72 bg-[#163d67] text-white shadow-xl transform transition-transform duration-300 ease-in-out",
+        "lg:relative lg:translate-x-0 lg:flex lg:flex-col",
         mobileMenuOpen ? "translate-x-0" : "translate-x-full"
       )}>
         <div className="flex h-20 shrink-0 items-center px-6 border-b border-white/10">
@@ -145,12 +146,12 @@ export default function Layout() {
             </div>
           </div>
         </div>
-      </div>
+      </aside>
 
-      {/* Main content */}
-      <div className="flex-1 min-h-screen pt-16 lg:pt-0">
-        <main className="h-full p-3 sm:p-4 md:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto h-full">
+      {/* Main content - Full width on mobile */}
+      <div className="flex-1 w-full min-h-screen pt-16 lg:pt-0">
+        <main className="h-full w-full p-3 sm:p-4 md:p-6 lg:p-8">
+          <div className="max-w-7xl mx-auto h-full w-full">
             <Outlet />
           </div>
         </main>
@@ -159,7 +160,7 @@ export default function Layout() {
       {/* Mobile overlay */}
       {mobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden" 
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
